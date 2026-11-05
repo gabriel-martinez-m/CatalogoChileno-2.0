@@ -1,0 +1,47 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: servicio-gateway
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:5173"
+              - "http://127.0.0.1:5173"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+      routes:
+        # 1. Servicio de Autenticación (Puerto 8080)
+        - id: servicio-autenticacion
+          uri: http://localhost:8080
+          predicates:
+            - Path=/auth/**
+
+        # 2. Servicio de Usuarios (Puerto 8090)
+        - id: servicio-usuario
+          uri: http://localhost:8090
+          predicates:
+            - Path=/usuarios/**
+
+        # 3. Servicio de Catálogo (Puerto 8091)
+        - id: servicio-catalogo
+          uri: http://localhost:8091
+          predicates:
+            - Path=/productos/**, /categorias/**, /regiones/**, /comunas/**, /etiquetas/**
+
+        # 4. Servicio de Carrito (Puerto 8092)
+        - id: servicio-carrito
+          uri: http://localhost:8092
+          predicates:
+            - Path=/carrito/**
