@@ -19,6 +19,8 @@
         <spring-cloud.version>2023.0.3</spring-cloud.version>
         <lombok.version>1.18.48</lombok.version>
         <jjwt.version>0.11.5</jjwt.version>
+        <mockito.version>5.23.0</mockito.version>
+        <byte-buddy.version>1.18.15</byte-buddy.version>
     </properties>
 
     <dependencies>

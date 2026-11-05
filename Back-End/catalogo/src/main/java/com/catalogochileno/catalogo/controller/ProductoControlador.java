@@ -46,6 +46,11 @@ public class ProductoControlador {
         return ResponseEntity.ok(productoServicio.obtenerPorId(id));
     }
 
+    @GetMapping("/{id}/disponible")
+    public ResponseEntity<Boolean> validarProductoParaCompra(@PathVariable Long id) {
+        return ResponseEntity.ok(productoServicio.estaDisponibleParaCompra(id));
+    }
+
     @GetMapping
     public ResponseEntity<List<Producto>> listarConFiltros(
             @RequestParam(required = false) String termino,

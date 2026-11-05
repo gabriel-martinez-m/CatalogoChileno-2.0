@@ -1,13 +1,12 @@
-package com.example.carrito;
+package com.catalogochileno.usuarios;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CarritoApplicationTests {
+class UsuariosApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
-
+    @Test
+    void contextLoads() {
+    }
 }

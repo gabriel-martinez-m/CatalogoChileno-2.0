@@ -87,6 +87,16 @@ public class ProductoServicio {
     }
 
     /**
+     * Valida si un producto existe y está aprobado para la venta (usado por servicio-carrito vía Feign).
+     */
+    @Transactional(readOnly = true)
+    public Boolean estaDisponibleParaCompra(Long id) {
+        return productoRepo.findById(id)
+                .map(p -> EstadoProductoEnum.APROBADO.equals(p.getEstado()))
+                .orElse(false);
+    }
+
+    /**
      * Regla de Negocio: Aprueba un producto pendiente para publicarlo en la tienda.
      */
     @Transactional
