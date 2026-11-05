@@ -1,0 +1,37 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-catalogochileno
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - catalogochileno-net
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin-catalogochileno
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - "8085:80"
+    depends_on:
+      - mysql
+    networks:
+      - catalogochileno-net
+
+volumes:
+  mysql_data:
+
+networks:
+  catalogochileno-net:
+    driver: bridge

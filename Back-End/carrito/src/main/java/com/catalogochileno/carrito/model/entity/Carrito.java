@@ -47,6 +47,64 @@ public class Carrito {
         this.fechaActualizacion = LocalDateTime.now();
     }
 
+    // --- GETTERS Y SETTERS EXPLÍCITOS (Compatibilidad Java 21) ---
+
+    public Long getIdCarrito() {
+        return idCarrito;
+    }
+
+    public void setIdCarrito(Long idCarrito) {
+        this.idCarrito = idCarrito;
+    }
+
+    public Long getIdUsuarioRef() {
+        return idUsuarioRef;
+    }
+
+    public void setIdUsuarioRef(Long idUsuarioRef) {
+        this.idUsuarioRef = idUsuarioRef;
+    }
+
+    public String getTokenSesionInvitado() {
+        return tokenSesionInvitado;
+    }
+
+    public void setTokenSesionInvitado(String tokenSesionInvitado) {
+        this.tokenSesionInvitado = tokenSesionInvitado;
+    }
+
+    public EstadoCarrito getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoCarrito estado) {
+        this.estado = estado;
+    }
+
+    public List<ItemCarrito> getItems() {
+        return items;
+    }
+
+    public void setItems(List<ItemCarrito> items) {
+        this.items = items;
+    }
+
+    public LocalDateTime getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public LocalDateTime getFechaActualizacion() {
+        return fechaActualizacion;
+    }
+
+    public void setFechaActualizacion(LocalDateTime fechaActualizacion) {
+        this.fechaActualizacion = fechaActualizacion;
+    }
+
     // --- MÉTODOS DE NEGOCIO SEGÚN UML ---
 
     /**

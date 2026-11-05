@@ -33,6 +33,48 @@ public class TokenRefresco {
 
     private Boolean estaRevocado = false;
 
+    // --- GETTERS Y SETTERS EXPLÍCITOS (Compatibilidad Java 21) ---
+
+    public Long getIdToken() {
+        return idToken;
+    }
+
+    public void setIdToken(Long idToken) {
+        this.idToken = idToken;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public Credencial getCredencial() {
+        return credencial;
+    }
+
+    public void setCredencial(Credencial credencial) {
+        this.credencial = credencial;
+    }
+
+    public Instant getFechaExpiracion() {
+        return fechaExpiracion;
+    }
+
+    public void setFechaExpiracion(Instant fechaExpiracion) {
+        this.fechaExpiracion = fechaExpiracion;
+    }
+
+    public Boolean getEstaRevocado() {
+        return estaRevocado;
+    }
+
+    public void setEstaRevocado(Boolean estaRevocado) {
+        this.estaRevocado = estaRevocado;
+    }
+
     // --- MÉTODOS DE NEGOCIO SEGÚN UML ---
 
     /**

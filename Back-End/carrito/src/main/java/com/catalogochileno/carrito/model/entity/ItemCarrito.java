@@ -39,6 +39,56 @@ public class ItemCarrito {
     @Column(nullable = false, updatable = false)
     private LocalDateTime fechaAgregado = LocalDateTime.now();
 
+    // --- GETTERS Y SETTERS EXPLÍCITOS (Compatibilidad Java 21) ---
+
+    public Long getIdItemCarrito() {
+        return idItemCarrito;
+    }
+
+    public void setIdItemCarrito(Long idItemCarrito) {
+        this.idItemCarrito = idItemCarrito;
+    }
+
+    public Carrito getCarrito() {
+        return carrito;
+    }
+
+    public void setCarrito(Carrito carrito) {
+        this.carrito = carrito;
+    }
+
+    public Long getIdProductoRef() {
+        return idProductoRef;
+    }
+
+    public void setIdProductoRef(Long idProductoRef) {
+        this.idProductoRef = idProductoRef;
+    }
+
+    public Integer getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public Integer getPrecioUnitarioClp() {
+        return precioUnitarioClp;
+    }
+
+    public void setPrecioUnitarioClp(Integer precioUnitarioClp) {
+        this.precioUnitarioClp = precioUnitarioClp;
+    }
+
+    public LocalDateTime getFechaAgregado() {
+        return fechaAgregado;
+    }
+
+    public void setFechaAgregado(LocalDateTime fechaAgregado) {
+        this.fechaAgregado = fechaAgregado;
+    }
+
     // --- MÉTODOS DE NEGOCIO SEGÚN UML ---
 
     /**
