@@ -1,5 +1,6 @@
 package com.catalogochileno.catalogo.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.catalogochileno.catalogo.model.enums.EstadoProductoEnum;
 import com.catalogochileno.catalogo.model.enums.TipoMedioEnum;
 import com.catalogochileno.catalogo.model.enums.TipoVentaEnum;
@@ -22,6 +23,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Producto {
 
     @Id
