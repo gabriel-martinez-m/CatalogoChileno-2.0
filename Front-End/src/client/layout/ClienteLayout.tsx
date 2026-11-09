@@ -34,7 +34,7 @@ export const ClienteLayout: React.FC = () => {
                 (e.target as HTMLElement).style.display = 'none'
               }}
             />
-            <div className="flex flex-col">
+             <div className="flex flex-col">
               <span className="text-xl font-bold tracking-tight text-slate-950 font-['Raleway']">
                 Catálogo<span className="text-[#0000FE]">Chileno</span>
               </span>

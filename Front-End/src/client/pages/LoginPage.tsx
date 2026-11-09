@@ -65,10 +65,10 @@ export const LoginPage: React.FC = () => {
         {/* Atajos de prueba para el profesor */}
         <div className="px-6 py-2">
           <div className="bg-[#F3F5FE] border border-[#D8DFFA] rounded-xl p-3">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-[#0000FE] mb-2">
+            {/* <div className="flex items-center gap-1.5 text-xs font-bold text-[#0000FE] mb-2">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Cuentas de prueba en MySQL (Docker):</span>
-            </div>
+            </div> */}
             <div className="flex gap-2">
               <button
                 type="button"
