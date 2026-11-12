@@ -1,6 +1,8 @@
 -- =========================================================================
 -- SEED DATA PARA CATÁLOGO CHILENO
 -- =========================================================================
+SET NAMES 'utf8mb4' COLLATE 'utf8mb4_unicode_ci';
+SET CHARACTER SET utf8mb4;
 
 -- 1. SERVICIO DE AUTENTICACIÓN (bd_autenticacion)
 USE `bd_autenticacion`;
@@ -25,7 +27,7 @@ ON DUPLICATE KEY UPDATE `nombre_completo` = VALUES(`nombre_completo`), `esta_ver
 INSERT INTO `perfil_artista` (`id_perfil_artista`, `id_usuario`, `nombre_artistico`, `biografia`)
 VALUES 
 (1, 2, 'MatiasV Fotografía Aérea', 'Fotógrafo y operador de drone certificado DGAC en Chile, especializado en paisajes patagónicos.')
-ON DUPLICATE KEY UPDATE `nombre_artistico` = VALUES(`nombre_artistico`);
+ON DUPLICATE KEY UPDATE `nombre_artistico` = VALUES(`nombre_artistico`), `biografia` = VALUES(`biografia`);
 
 INSERT INTO `datos_bancarios` (`id_datos_bancarios`, `id_usuario`, `banco_nombre`, `tipo_cuenta`, `numero_cuenta`, `rut_titular`)
 VALUES 
@@ -58,7 +60,7 @@ INSERT INTO `categoria` (`id`, `nombre`, `slug`, `descripcion`, `activa`) VALUES
 (1, 'Paisajes Chilenos', 'paisajes-chilenos', 'Fotografías de ultra alta resolución de naturaleza y paisajes chilenos.', 1),
 (2, 'Dron & Video 4K', 'dron-video-4k', 'Tomas aéreas cinematográficas en 4K y 60fps con operador certificado.', 1),
 (3, 'Cultura & Urbana', 'cultura-urbana', 'Escenas urbanas, arquitectura y patrimonio cultural chileno.', 1)
-ON DUPLICATE KEY UPDATE `nombre` = VALUES(`nombre`);
+ON DUPLICATE KEY UPDATE `nombre` = VALUES(`nombre`), `descripcion` = VALUES(`descripcion`);
 
 -- Obras y Productos disponibles para venta
 INSERT INTO `producto` (
@@ -102,4 +104,10 @@ INSERT INTO `producto` (
     6000, 4000, 0, 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80',
     1, 5, 5, NOW()
 )
-ON DUPLICATE KEY UPDATE `titulo` = VALUES(`titulo`), `precio` = VALUES(`precio`), `estado` = VALUES(`estado`);
+ON DUPLICATE KEY UPDATE 
+    `titulo` = VALUES(`titulo`), 
+    `descripcion` = VALUES(`descripcion`),
+    `precio` = VALUES(`precio`), 
+    `id_comuna` = VALUES(`id_comuna`),
+    `id_region` = VALUES(`id_region`),
+    `estado` = VALUES(`estado`);
