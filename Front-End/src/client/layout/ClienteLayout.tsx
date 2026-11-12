@@ -25,16 +25,7 @@ export const ClienteLayout: React.FC = () => {
           
           {/* Logo e Identidad */}
           <Link to="/" className="flex items-center gap-3 group">
-            <img 
-              src="/images/LogoCatalogoChileno.svg" 
-              alt="Logo Catálogo Chileno" 
-              className="h-9 w-auto transition-transform group-hover:scale-105"
-              onError={(e) => {
-                // Fallback si no carga imagen directa
-                (e.target as HTMLElement).style.display = 'none'
-              }}
-            />
-             <div className="flex flex-col">
+            <div className="flex flex-col">
               <span className="text-xl font-bold tracking-tight text-slate-950 font-['Raleway']">
                 Catálogo<span className="text-[#0000FE]">Chileno</span>
               </span>
