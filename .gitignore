@@ -1,0 +1,17 @@
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.iml
+
+# Build Artifacts
+target/
+dist/
+node_modules/
