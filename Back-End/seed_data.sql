@@ -40,7 +40,8 @@ INSERT INTO `region` (`id`, `codigo`, `nombre`) VALUES
 (1, 'CL-RM', 'Región Metropolitana de Santiago'),
 (2, 'CL-VS', 'Región de Valparaíso'),
 (3, 'CL-LL', 'Región de Los Lagos'),
-(4, 'CL-MA', 'Región de Magallanes y Antártica Chilena')
+(4, 'CL-MA', 'Región de Magallanes y Antártica Chilena'),
+(5, 'CL-BI', 'Región del Biobío')
 ON DUPLICATE KEY UPDATE `nombre` = VALUES(`nombre`);
 
 -- Comunas de Chile
@@ -48,7 +49,8 @@ INSERT INTO `comuna` (`id`, `nombre`, `id_region`) VALUES
 (1, 'Santiago', 1),
 (2, 'Valparaíso', 2),
 (3, 'Puerto Varas', 3),
-(4, 'Torres del Paine', 4)
+(4, 'Torres del Paine', 4),
+(5, 'Concepción', 5)
 ON DUPLICATE KEY UPDATE `nombre` = VALUES(`nombre`);
 
 -- Categorías temáticas
@@ -92,5 +94,12 @@ INSERT INTO `producto` (
     29990.00, 'FOTO', 'VENTA_NORMAL', 'APROBADO', 'JPG RAW',
     5472, 3648, 0, 'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=1200&q=80',
     3, 1, 1, NOW()
+),
+(
+    5, 2, 'Desembocadura del Río Biobío al Atardecer',
+    'Panorámica en alta definición de la costa y la desembocadura del histórico río Biobío en Concepción.',
+    22990.00, 'FOTO', 'VENTA_NORMAL', 'APROBADO', 'JPG RAW',
+    6000, 4000, 0, 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80',
+    1, 5, 5, NOW()
 )
 ON DUPLICATE KEY UPDATE `titulo` = VALUES(`titulo`), `precio` = VALUES(`precio`), `estado` = VALUES(`estado`);

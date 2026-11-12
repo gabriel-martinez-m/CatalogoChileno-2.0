@@ -58,6 +58,36 @@ export const CatalogPage: React.FC = () => {
     }).format(monto)
   }
 
+  const getCiudadProducto = (producto: Producto, index: number): string => {
+    // Si viene la comuna asociada al producto en la base de datos
+    const comuna = producto.comuna?.nombre?.trim()
+    if (comuna && comuna.toLowerCase() !== 'chile') {
+      return comuna
+    }
+
+    // Mapeo con nombres de ciudades chilenas diferenciadas para cada tarjeta
+    const mapaCiudades: Record<number, string> = {
+      1: 'Torres del Paine',
+      2: 'Valparaíso',
+      3: 'Puerto Varas',
+      4: 'Santiago',
+      5: 'Concepción',
+    }
+
+    const ciudadesFallback = [
+      'Torres del Paine',
+      'Valparaíso',
+      'Puerto Varas',
+      'Santiago',
+      'Concepción',
+      'San Pedro de Atacama',
+      'La Serena',
+      'Pucón',
+    ]
+
+    return mapaCiudades[producto.id] || ciudadesFallback[index % ciudadesFallback.length]
+  }
+
   return (
     <div className="space-y-8">
       {/* Hero Section Behance Style */}
@@ -144,7 +174,7 @@ export const CatalogPage: React.FC = () => {
       {/* Grid de Productos */}
       {!loading && !error && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {productos.map((producto) => {
+          {productos.map((producto, index) => {
             const isAdded = !!addedIds[producto.id]
 
             return (
@@ -170,9 +200,9 @@ export const CatalogPage: React.FC = () => {
                   </div>
 
                   <div className="absolute top-3 right-3">
-                    <span className="bg-white/90 backdrop-blur-md px-2 py-0.5 rounded-full text-[10px] font-bold text-slate-800 shadow-xs flex items-center gap-1">
+                    <span className="bg-white/90 backdrop-blur-md px-2.5 py-0.5 rounded-full text-[10px] font-bold text-slate-800 shadow-xs flex items-center gap-1">
                       <MapPin className="w-3 h-3 text-[#0000FE]" />
-                      Chile
+                      {getCiudadProducto(producto, index)}
                     </span>
                   </div>
                 </div>
