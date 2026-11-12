@@ -1,196 +1,156 @@
-# 🇨🇱 CatálogoChileno - Plataforma Microservicios Full Stack
+# 🇨🇱 CatálogoChileno - Ecosistema de Microservicios y Frontend
 
-Proyecto desarrollado para la asignatura **Desarrollo Full Stack 2** (Duoc UC).
-Ecosistema completo basado en **Java 21**, **Spring Boot 3.x / 4.x**, **Spring Cloud Gateway**, **OpenFeign**, **MySQL 8.0 en Docker**, y un frontend moderno desarrollado en **React 19**, **TypeScript estricto**, **Tailwind CSS v4** y componentes atómicos con **CVA / Shadcn UI**.
+Proyecto desarrollado para la asignatura **Desarrollo Full Stack 2** (Duoc UC). Plataforma web para la venta de obras y fotografías digitales de artistas chilenos con licencias comerciales inmediatas.
 
 ---
 
-## 🏛️ 1. Arquitectura de la Solución
+## 🛠️ 1. Stack Tecnológico
 
-```mermaid
-flowchart TD
-    subgraph Frontend ["Frontend (Vite :5173)"]
-        UI["React 19 + TypeScript + Tailwind v4"]
-    end
+### Backend (Microservicios)
+- **Lenguaje:** Java 21 LTS
+- **Framework:** Spring Boot 3.x / 4.x
+- **Persistencia:** Spring Data JPA / Hibernate (Dialecto MySQL)
+- **Validación:** Spring Validation (`@Valid`, Bean Validation)
+- **Enrutamiento & Gateway:** Spring Cloud Gateway (CORS global + proxy reactivo en puerto `8000`)
+- **Comunicación entre Microservicios:** Spring Cloud OpenFeign (comunicación HTTP síncrona declarativa)
+- **Seguridad:** Spring Security + BCrypt + Tokens JWT (HMAC-SHA)
+- **Pruebas Unitarias:** JUnit 5 (Jupiter) + Mockito (Mocks de repositorios y clientes Feign)
+- **Gestor de Dependencias:** Apache Maven (Maven Wrapper `./mvnw`)
 
-    subgraph GatewayZone ["Punto Único de Entrada (:8000)"]
-        GW["Spring Cloud Gateway\n(CORS + Enrutamiento)"]
-    end
+### Base de Datos & Contenedores
+- **Motor BD:** MySQL 8.0 (4 bases de datos lógicamente aisladas)
+- **Administrador Web:** phpMyAdmin (puerto `8085`)
+- **Orquestación:** Docker & Docker Compose
 
-    subgraph Microservicios ["Microservicios Backend"]
-        AUTH["servicio-autenticacion\n(:8080 - JWT / BCrypt)"]
-        USERS["servicio-usuario\n(:8090 - Perfiles)"]
-        CAT["servicio-catalogo\n(:8091 - Obras y Stock)"]
-        CART["servicio-carrito\n(:8092 - Items y Carritos)"]
-    end
+### Frontend
+- **Runtime & Bundler:** Vite 8+ con TypeScript en modo estricto
+- **Librería UI:** React 19 (Hooks, Context API, inmutabilidad)
+- **Enrutamiento:** React Router v7 Data Router (`createBrowserRouter` + `<RouterProvider />`)
+- **Estilos:** Tailwind CSS v4 con variables temáticas y colores de marca
+- **Componentes:** Arquitectura atómica estilo Shadcn UI con `class-variance-authority` (CVA) y utilidad `cn`
+- **Iconografía:** Lucide React
 
-    subgraph DatabaseZone ["Docker Compose (:3306)"]
-        DB1[("bd_autenticacion")]
-        DB2[("bd_usuarios")]
-        DB3[("bd_catalogo_productos")]
-        DB4[("bd_carrito")]
-        PMA["phpMyAdmin (:8085)"]
-    end
+---
 
-    UI -->|HTTP / JSON| GW
-    GW -->|/auth/**| AUTH
-    GW -->|/usuarios/**| USERS
-    GW -->|/productos/**| CAT
-    GW -->|/carrito/**| CART
+## ⚙️ 2. ¿Cómo Funciona la Aplicación?
 
-    CART -->|Spring Cloud OpenFeign\nGET /productos/{id}/disponible| CAT
+La plataforma opera bajo una arquitectura de microservicios coordinados por un **Gateway Central**:
 
-    AUTH --> DB1
-    USERS --> DB2
-    CAT --> DB3
-    CART --> DB4
-    PMA -.-> DatabaseZone
+```
+[ Frontend: React 19 ]
+         │
+         ▼ (HTTP :8000)
+[ Spring Cloud Gateway ]
+    ├── /auth/**      ──►  [ servicio-autenticacion (:8080) ] ──► (bd_autenticacion)
+    ├── /usuarios/**  ──►  [ servicio-usuario (:8090) ]       ──► (bd_usuarios)
+    ├── /productos/** ──►  [ servicio-catalogo (:8091) ]      ──► (bd_catalogo_productos)
+    └── /carrito/**   ──►  [ servicio-carrito (:8092) ]       ──► (bd_carrito)
+                                 │ (OpenFeign)
+                                 └──► Valida disponibilidad en servicio-catalogo
 ```
 
+### Flujo de Negocio Principal:
+1. **Inicio de Sesión:** El cliente ingresa sus credenciales en el Frontend. El Gateway redirige la petición a `servicio-autenticacion`, el cual verifica el hash BCrypt en MySQL y emite un token JWT.
+2. **Exploración de Catálogo:** La aplicación consulta las obras aprobadas a través del Gateway hacia `servicio-catalogo`, cargando fotos, precios y ciudades chilenas (Torres del Paine, Valparaíso, Puerto Varas, Santiago, Concepción).
+3. **Agregar al Carrito con OpenFeign:** Cuando el usuario hace clic en *"Agregar"*, `servicio-carrito` realiza una llamada síncrona vía **Spring Cloud OpenFeign** al endpoint `GET /productos/{id}/disponible` de `servicio-catalogo`. Si la obra está activa y aprobada, se crea el carrito y se persiste el ítem en la base de datos `bd_carrito`.
+4. **Consulta y Gestión:** El usuario puede revisar su carrito con el desglose en CLP y los subtotales calculados.
+
 ---
 
-## 🚀 2. Inicio Rápido con Script Automatizado
+## 🚀 3. ¿Cómo Poner en Marcha el Proyecto?
 
-Se incluye un script interactivo en la raíz del repositorio para gestionar todo el ecosistema con un solo comando:
-
+### Opción A: Con el Script Automatizado (Recomendada)
+En la terminal, dentro de la carpeta principal:
 ```bash
 ./iniciar-servicios.sh
 ```
-
-El menú permite:
-1. **Levantar bases de datos** en Docker (MySQL + phpMyAdmin).
-2. **Iniciar todos los microservicios** en segundo plano con logs centralizados en `./logs/`.
-3. **Detener microservicios** de forma limpia.
-4. **Iniciar Frontend Vite** (`npm run dev`).
-5. **Ejecutar pruebas unitarias** (JUnit 5 + Mockito).
-6. **Verificar estado de puertos**.
+El menú interactivo te permite levantar Docker (opción 1), iniciar los microservicios en segundo plano (opción 2) y abrir el frontend (opción 4).
 
 ---
 
-## ⚙️ 3. Inicio Manual Paso a Paso
+### Opción B: Inicio Manual por Terminales
 
-### Paso 1: Base de Datos Docker
+#### Paso 1: Levantar Bases de Datos (Docker)
 ```bash
 cd Back-End
 docker compose up -d
 ```
-- **MySQL:** `localhost:3306` (Usuario: `root`, Password: `rootpassword`)
+- **MySQL:** `localhost:3306` (Usuario: `root`, Contraseña: `root`)
 - **phpMyAdmin:** [http://localhost:8085](http://localhost:8085)
 
-### Paso 2: Microservicios (En terminales separadas o con Maven)
+#### Paso 2: Iniciar Microservicios
+Abre terminales separadas para cada servicio:
 ```bash
-# Terminal 1: Gateway
+# Terminal 1 - Gateway
 cd Back-End/gateway && ./mvnw spring-boot:run
 
-# Terminal 2: Autenticación
-cd Back-End/autenticacion && ./mvnw spring-boot:run
-
-# Terminal 3: Catálogo
+# Terminal 2 - Catálogo
 cd Back-End/catalogo && ./mvnw spring-boot:run
 
-# Terminal 4: Carrito
+# Terminal 3 - Carrito
 cd Back-End/carrito && ./mvnw spring-boot:run
 
-# Terminal 5 (Opcional): Usuarios
+# Terminal 4 - Autenticación
+cd Back-End/autenticacion && ./mvnw spring-boot:run
+
+# Terminal 5 (Opcional) - Usuarios
 cd Back-End/usuarios && ./mvnw spring-boot:run
 ```
 
-### Paso 3: Frontend (React 19 + Tailwind v4)
+#### Paso 3: Iniciar Frontend
 ```bash
 cd Front-End
 npm run dev
 ```
-Acceder en el navegador a: **[http://localhost:5173](http://localhost:5173)**.
+Abre en tu navegador: **[http://localhost:5173](http://localhost:5173)**
 
 ---
 
-## 👤 4. Credenciales de Prueba (Seed Data)
+## 🧪 4. ¿Cómo Hacer las Pruebas?
 
-El script inicial `seed_data.sql` precarga usuarios listos para la demostración:
+### A. Prueba Funcional en el Navegador (Flujo Completo)
 
-| Rol | Correo | Contraseña | ID Usuario |
-| :--- | :--- | :--- | :--- |
-| **Cliente** | `cliente@test.cl` | `Password123!` | `1` |
-| **Artista** | `artista@test.cl` | `Password123!` | `2` |
-
-> En la pantalla de Login del Frontend, existe un botón de acceso directo **"👤 Cargar Cliente"** para rellenar automáticamente las credenciales.
+1. **Entrar al sistema:** Ingresa a [http://localhost:5173/login](http://localhost:5173/login).
+2. **Cargar credenciales de prueba:** Haz clic en el botón de atajo **"👤 Cargar Cliente"** (rellena automáticamente `cliente@test.cl` / `Password123!`) y presiona **"Ingresar a CatálogoChileno"**.
+3. **Verificar sesión:** En la barra superior aparecerá tu nombre (*Gabriel Martínez*) con sesión activa.
+4. **Ver Catálogo:** Explora las tarjetas de obras chilenas con sus respectivas ciudades y precios en CLP.
+5. **Agregar al Carrito:** Haz clic en **"Agregar"** en cualquier producto (ej: *Atardecer en Cuernos del Paine*).
+6. **Verificar Carrito:** Haz clic en el botón **Carrito** en la esquina superior derecha o en *"Revisar Carrito"* para comprobar los ítems agregados y el total calculado.
+7. **Verificar Persistencia en MySQL:** Ingresa a phpMyAdmin en [http://localhost:8085](http://localhost:8085) (usuario `root`, password `root`), ve a la base de datos `bd_carrito` y revisa la tabla `item_carrito` para confirmar la creación física del registro.
 
 ---
 
-## 🧪 5. Pruebas Unitarias (JUnit 5 + Mockito)
+### B. Pruebas Unitarias Automatizadas (JUnit 5 + Mockito)
 
-El proyecto cuenta con suites de pruebas unitarias aisladas con **Mockito**:
+Las pruebas están construidas con **JUnit 5** y **Mockito**, aislando la lógica de negocio y simulando las dependencias externas (bases de datos y clientes Feign).
 
-### Ejecutar todas las pruebas:
+Para ejecutarlas desde la consola:
+
 ```bash
-# Autenticación (5 tests unitarios + 1 contexto)
+# 1. Pruebas de Autenticación (5 tests unitarios)
 cd Back-End/autenticacion && ./mvnw test
 
-# Catálogo (5 tests unitarios + 1 contexto)
+# 2. Pruebas de Catálogo (5 tests unitarios)
 cd Back-End/catalogo && ./mvnw test
 
-# Carrito (5 tests unitarios + 1 contexto)
+# 3. Pruebas de Carrito y Feign (5 tests unitarios)
 cd Back-End/carrito && ./mvnw test
 ```
 
-### Casos de Prueba Cubiertos:
+#### ¿Qué evalúa cada prueba?
 - **`AutenticacionServicioTest`**:
-  - `autenticar_CredencialesValidas_RetornaJwt`: Emisión de JWT y guardado de refresh token.
-  - `autenticar_CorreoNoExiste_LanzaExcepcion`: Excepción ante email inexistente.
-  - `autenticar_ContrasenaErronea_LanzaExcepcion`: Excepción ante clave errónea con BCrypt.
-  - `autenticar_CuentaDesactivada_LanzaExcepcion`: Bloqueo de cuentas inactivas.
-  - `registrar_UsuarioNuevo_LlamaFeignYGuarda`: Creación de credenciales y llamada Feign a `servicio-usuario`.
+  - `autenticar_CredencialesValidas_RetornaJwt`: Verifica la emisión exitosa del token JWT y el registro de la sesión.
+  - `autenticar_CorreoNoExiste_LanzaExcepcion`: Asegura que el sistema arroje error ante correos no registrados.
+  - `autenticar_ContrasenaErronea_LanzaExcepcion`: Valida que BCrypt rechace contraseñas incorrectas.
+  - `autenticar_CuentaDesactivada_LanzaExcepcion`: Verifica que cuentas inactivas no puedan ingresar.
+  - `registrar_UsuarioNuevo_LlamaFeignYGuarda`: Comprueba la persistencia de credenciales y la sincronización vía Feign con el microservicio de usuarios.
 - **`CarritoServicioTest`**:
-  - `agregarItem_ProductoDisponible_CreaOCarritoYAgregaItem`: Valida con `CatalogoClienteFeign`, calcula subtotales y persiste.
-  - `agregarItem_ProductoNoDisponible_LanzaExcepcion`: Lanza `IllegalStateException` y no guarda si catálogo rechaza el producto.
-  - `agregarItem_ProductoYaExisteEnCarrito_IncrementaCantidad`: Incrementa cantidad sin duplicar fila.
-  - `obtenerOCrearCarrito_SinIdentificador_LanzaExcepcion`: Validación de parámetros obligatorios.
-  - `vaciarCarrito_Exitoso`: Vaciado de ítems y persistencia.
+  - `agregarItem_ProductoDisponible_CreaOCarritoYAgregaItem`: Simula la respuesta exitosa de `CatalogoClienteFeign`, calcula subtotales y comprueba el guardado en base de datos.
+  - `agregarItem_ProductoNoDisponible_LanzaExcepcion`: Comprueba que si Catálogo responde que el producto no está disponible, se cancele la operación y no se guarde nada en MySQL.
+  - `agregarItem_ProductoYaExisteEnCarrito_IncrementaCantidad`: Verifica que agregar un producto repetido incremente la cantidad sin duplicar filas.
+  - `obtenerOCrearCarrito_SinIdentificador_LanzaExcepcion`: Asegura validación obligatoria de usuario o token.
+  - `vaciarCarrito_Exitoso`: Valida el vaciado de ítems del carrito.
 - **`ProductoServicioTest`**:
-  - `estaDisponibleParaCompra_ProductoAprobado_RetornaTrue`: Endpoint consumido por Carrito vía Feign.
-  - `estaDisponibleParaCompra_ProductoPendiente_RetornaFalse`: Rechazo si el producto aún está en moderación.
-  - `aprobarProducto_Exitoso`: Transición de estado a `APROBADO`.
-
----
-
-## 🗺️ 6. Mapeo de Puertos y Servicios
-
-| Componente | Puerto | Protocolo / URL | Descripción |
-| :--- | :--- | :--- | :--- |
-| **Frontend (Vite)** | `5173` | [http://localhost:5173](http://localhost:5173) | UI React 19 + Tailwind CSS v4 |
-| **Gateway** | `8000` | [http://localhost:8000](http://localhost:8000) | Enrutador global y CORS |
-| **Autenticación** | `8080` | [http://localhost:8080](http://localhost:8080) | Login JWT, registro, BCrypt |
-| **Usuarios** | `8090` | [http://localhost:8090](http://localhost:8090) | Perfiles de clientes y artistas |
-| **Catálogo** | `8091` | [http://localhost:8091](http://localhost:8091) | Productos, stock, categorías |
-| **Carrito** | `8092` | [http://localhost:8092](http://localhost:8092) | Carritos, ítems, Feign |
-| **MySQL 8.0** | `3306` | `localhost:3306` | 4 bases de datos lógicamente aisladas |
-| **phpMyAdmin** | `8085` | [http://localhost:8085](http://localhost:8085) | Visor web de base de datos MySQL |
-
----
-
-## 📂 7. Estructura del Proyecto
-
-```
-CatalogoChileno/
-├── Back-End/
-│   ├── docker-compose.yml       # MySQL 8.0 + phpMyAdmin
-│   ├── init.sql                 # Creación de bases de datos
-│   ├── seed_data.sql            # Datos de prueba (usuarios y productos)
-│   ├── gateway/                 # Microservicio Spring Cloud Gateway (:8000)
-│   ├── autenticacion/           # Microservicio JWT & BCrypt (:8080)
-│   ├── catalogo/                # Microservicio Obras y Productos (:8091)
-│   ├── carrito/                 # Microservicio Carrito de Compras (:8092)
-│   └── usuarios/                # Microservicio Perfiles (:8090)
-├── Front-End/                   # React 19 + TypeScript + Tailwind v4 + CVA (:5173)
-│   ├── src/
-│   │   ├── client/              # Layout y páginas públicas (Login, Catálogo, Carrito)
-│   │   ├── components/ui/       # Componentes atómicos (Button, Input, Badge, Card)
-│   │   ├── context/             # AuthContext y CartContext
-│   │   ├── interfaces/          # Tipado estricto TS
-│   │   ├── router/              # Data Router (createBrowserRouter)
-│   │   └── services/            # Clientes API vía Gateway
-├── Documentos/                  # Especificación de Requisitos y Diagramas UML
-├── logs/                        # Logs de ejecución en background
-├── iniciar-servicios.sh         # Script de orquestación
-└── README.md                    # Documentación del proyecto
-```
+  - `estaDisponibleParaCompra_ProductoAprobado_RetornaTrue`: Comprueba el endpoint que consume el Carrito vía Feign.
+  - `estaDisponibleParaCompra_ProductoPendiente_RetornaFalse`: Valida el rechazo si la obra aún no ha sido aprobada.
+  - `aprobarProducto_Exitoso`: Evalúa el cambio de estado a `APROBADO`.
