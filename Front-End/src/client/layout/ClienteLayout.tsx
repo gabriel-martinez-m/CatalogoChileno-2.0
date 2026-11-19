@@ -13,9 +13,9 @@ export const ClienteLayout: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans">
-      {/* Top Banner Informativo / Duoc UC */}
+      {/* Top Banner Informativo */}
       <div className="bg-[#0000FE] text-white text-xs py-1.5 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2">
-        <span>Ecosistema CatalogoChileno — Microservicios Fullstack 2 (Duoc UC)</span>
+        <span>Marketplace Digital de Fotografía y Arte Visual Chileno</span>
       </div>
 
       {/* Navbar Principal Estilo Behance */}
@@ -40,10 +40,6 @@ export const ClienteLayout: React.FC = () => {
               <Compass className="w-4 h-4 text-[#0000FE]" />
               Explorar Catálogo
             </Link>
-            <span className="text-slate-300">|</span>
-            <span className="text-xs text-slate-400 font-normal">
-              4 Microservicios activos en MySQL Docker
-            </span>
           </nav>
 
           {/* Acciones de Usuario y Carrito */}
@@ -108,15 +104,13 @@ export const ClienteLayout: React.FC = () => {
       {/* Footer Minimalista */}
       <footer className="bg-white border-t border-slate-200/80 py-8 text-center text-xs text-slate-500">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p>© 2026 CatálogoChileno SpA. Proyecto Full Stack 2 — Duoc UC.</p>
+          <p>© 2026 CatálogoChileno SpA. Todos los derechos reservados.</p>
           <div className="flex items-center gap-4 text-slate-400">
-            <span>Spring Boot 3.x (Java 21)</span>
+            <span>Arte Digital Chileno</span>
             <span>•</span>
-            <span>MySQL Docker</span>
+            <span>Licencias Comerciales</span>
             <span>•</span>
-            <span>Spring Cloud Gateway</span>
-            <span>•</span>
-            <span>React 19 + Tailwind v4</span>
+            <span>Pago Seguro</span>
           </div>
         </div>
       </footer>

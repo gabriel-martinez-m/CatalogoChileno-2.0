@@ -58,7 +58,7 @@ export const LoginPage: React.FC = () => {
             Iniciar Sesión
           </CardTitle>
           <CardDescription className="text-sm text-slate-500">
-            Ingresa al ecosistema de microservicios autenticado con JWT
+            Inicia sesión para gestionar tus compras y licencias
           </CardDescription>
         </CardHeader>
 
@@ -100,11 +100,8 @@ export const LoginPage: React.FC = () => {
               <div className="p-3 text-xs bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl space-y-1">
                 <div className="flex items-center gap-1.5 font-bold">
                   <CheckCircle2 className="w-4 h-4" />
-                  <span>¡Token JWT emitido exitosamente! Redirigiendo...</span>
+                  <span>¡Inicio de sesión exitoso! Redirigiendo...</span>
                 </div>
-                <p className="font-mono text-[10px] truncate text-slate-500">
-                  {successToken.substring(0, 40)}...
-                </p>
               </div>
             )}
 
@@ -154,7 +151,7 @@ export const LoginPage: React.FC = () => {
               disabled={isLoading || !!successToken}
             >
               {isLoading ? (
-                <span>Validando en Gateway...</span>
+                <span>Iniciando sesión...</span>
               ) : (
                 <>
                   <span>Ingresar a CatálogoChileno</span>

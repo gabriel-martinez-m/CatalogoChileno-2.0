@@ -133,7 +133,7 @@ export const CatalogPage: React.FC = () => {
             Obras Destacadas
           </h2>
           <p className="text-xs text-slate-500">
-            Conectado a MySQL <code className="text-[#0000FE] font-bold">bd_catalogo_productos</code> a través de Spring Cloud Gateway
+            Fotografías y material visual exclusivo de artistas chilenos
           </p>
         </div>
 
@@ -149,7 +149,7 @@ export const CatalogPage: React.FC = () => {
         <div className="text-center py-16 space-y-3">
           <div className="w-10 h-10 border-4 border-[#0000FE] border-t-transparent rounded-full animate-spin mx-auto" />
           <p className="text-sm font-medium text-slate-600">
-            Consultando obras a microservicio-catalogo (Puerto 8091 vía Gateway)...
+            Cargando obras del catálogo...
           </p>
         </div>
       )}
@@ -161,7 +161,7 @@ export const CatalogPage: React.FC = () => {
             <h4 className="font-bold text-sm">No se pudo cargar el catálogo automáticamente</h4>
             <p className="text-xs text-amber-800">{error}</p>
             <p className="text-xs text-slate-500 pt-2">
-              Asegúrate de tener levantado el Gateway (puerto 8000) y el microservicio de catálogo (puerto 8091).
+              Ocurrió un problema de conexión con el servidor. Intenta nuevamente en unos segundos.
             </p>
             <Button size="sm" variant="outline" onClick={loadProductos} className="mt-2 text-xs">
               Reintentar conexión

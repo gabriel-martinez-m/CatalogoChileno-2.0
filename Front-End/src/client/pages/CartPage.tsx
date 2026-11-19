@@ -29,7 +29,7 @@ export const CartPage: React.FC = () => {
             <span>Carrito de Compras</span>
           </h1>
           <p className="text-xs text-slate-500">
-            Sincronizado en tiempo real con MySQL <code className="text-[#0000FE] font-bold">bd_carrito</code>
+            Revisa las obras seleccionadas antes de finalizar tu compra
           </p>
         </div>
 
@@ -39,16 +39,6 @@ export const CartPage: React.FC = () => {
             <span>Seguir Explorando</span>
           </Button>
         </Link>
-      </div>
-
-      {/* Explicación Técnica para la presentación al Profesor */}
-      <div className="bg-[#F3F5FE] border border-[#D8DFFA] rounded-2xl p-4 text-xs text-slate-700 space-y-1.5">
-        <div className="flex items-center gap-2 font-bold text-[#0000FE]">
-          <span>Trazabilidad de Microservicios Demostrada:</span>
-        </div>
-        <p className="leading-relaxed">
-          Cada ítem añadido a esta lista fue recibido por <code className="font-bold text-slate-900">servicio-carrito</code> (puerto 8092), el cual se comunicó de forma síncrona vía <code className="font-bold text-[#0000FE]">Spring Cloud OpenFeign</code> con <code className="font-bold text-slate-900">servicio-catalogo</code> (puerto 8091) para verificar stock y vigencia antes de persistir en MySQL.
-        </p>
       </div>
 
       {/* Carrito Vacío */}
