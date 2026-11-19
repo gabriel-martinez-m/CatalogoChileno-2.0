@@ -1,6 +1,6 @@
 import React from 'react'
 import { Outlet, Link, useNavigate } from 'react-router-dom'
-import { ShoppingCart, User, LogOut, Compass, Sparkles } from 'lucide-react'
+import { ShoppingCart, User, LogOut, Compass } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { useCart } from '@/context/CartContext'
 import { Button } from '@/components/ui/button'
@@ -15,7 +15,6 @@ export const ClienteLayout: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans">
       {/* Top Banner Informativo / Duoc UC */}
       <div className="bg-[#0000FE] text-white text-xs py-1.5 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2">
-        <Sparkles className="w-3.5 h-3.5" />
         <span>Ecosistema CatalogoChileno — Microservicios Fullstack 2 (Duoc UC)</span>
       </div>
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { ShoppingCart, Trash2, ArrowLeft, ShieldCheck, CreditCard, Sparkles, AlertCircle } from 'lucide-react'
+import { ShoppingCart, Trash2, ArrowLeft, ShieldCheck, CreditCard, AlertCircle } from 'lucide-react'
 import { useCart } from '@/context/CartContext'
 import { useAuth } from '@/context/AuthContext'
 import { Button } from '@/components/ui/button'
@@ -44,7 +44,6 @@ export const CartPage: React.FC = () => {
       {/* Explicación Técnica para la presentación al Profesor */}
       <div className="bg-[#F3F5FE] border border-[#D8DFFA] rounded-2xl p-4 text-xs text-slate-700 space-y-1.5">
         <div className="flex items-center gap-2 font-bold text-[#0000FE]">
-          <Sparkles className="w-4 h-4" />
           <span>Trazabilidad de Microservicios Demostrada:</span>
         </div>
         <p className="leading-relaxed">

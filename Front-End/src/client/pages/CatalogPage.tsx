@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { ShoppingCart, Check, AlertCircle, Sparkles, MapPin, Eye, Camera, Video, ShieldCheck } from 'lucide-react'
+import { ShoppingCart, Check, AlertCircle, MapPin, Eye, Camera, Video, ShieldCheck } from 'lucide-react'
 import type { Producto } from '@/interfaces/product.interface'
 import { productService } from '@/services/product.service'
 import { useCart } from '@/context/CartContext'
@@ -94,7 +94,6 @@ export const CatalogPage: React.FC = () => {
       <section className="relative overflow-hidden rounded-3xl bg-linear-to-r from-slate-950 via-slate-900 to-[#0000FE]/90 text-white p-8 md:p-12 shadow-xl">
         <div className="relative z-10 max-w-2xl space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-semibold text-white/90 border border-white/10">
-            <Sparkles className="w-3.5 h-3.5 text-[#D8DFFA]" />
             <span>Contenido digital 100% chileno con derechos de autor</span>
           </div>
 
