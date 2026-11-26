@@ -12,3 +12,11 @@ export interface LoginCredentials {
   correo: string
   contrasena: string
 }
+
+export interface RegisterData {
+  nombre: string
+  rut: string
+  correo: string
+  telefono?: string
+  contrasena: string
+}

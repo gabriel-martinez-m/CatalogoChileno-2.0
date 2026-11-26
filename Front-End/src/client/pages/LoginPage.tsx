@@ -1,50 +1,37 @@
 import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { Lock, Mail, ArrowRight, ShieldCheck, CheckCircle2, AlertCircle } from 'lucide-react'
+import { Lock, Mail, ArrowRight, CheckCircle2, AlertCircle } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 
 export const LoginPage: React.FC = () => {
-  const [correo, setCorreo] = useState<string>('cliente@test.cl')
-  const [contrasena, setContrasena] = useState<string>('Password123!')
+  const [correo, setCorreo] = useState<string>('')
+  const [contrasena, setContrasena] = useState<string>('')
   const [error, setError] = useState<string | null>(null)
-  const [successToken, setSuccessToken] = useState<string | null>(null)
+  const [success, setSuccess] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const { login } = useAuth()
   const navigate = useNavigate()
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault()
     setError(null)
     setIsLoading(true)
 
     try {
       const session = await login(correo, contrasena)
-      setSuccessToken(session.token)
-      setTimeout(() => {
-        navigate('/')
-      }, 1200)
+      setSuccess(true)
+      const destino = session.rol === 'ROLE_ADMINISTRADOR' ? '/admin' : '/'
+      setTimeout(() => navigate(destino), 800)
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Error al autenticar'
       setError(msg)
     } finally {
       setIsLoading(false)
     }
-  }
-
-  const fillQuickCredentials = (tipo: 'cliente' | 'artista') => {
-    if (tipo === 'cliente') {
-      setCorreo('cliente@test.cl')
-      setContrasena('Password123!')
-    } else {
-      setCorreo('artista@test.cl')
-      setContrasena('Password123!')
-    }
-    setError(null)
   }
 
   return (
@@ -58,34 +45,9 @@ export const LoginPage: React.FC = () => {
             Iniciar Sesión
           </CardTitle>
           <CardDescription className="text-sm text-slate-500">
-            Inicia sesión para gestionar tus compras y licencias
+            Ingresa con tu correo y contraseña
           </CardDescription>
         </CardHeader>
-
-        {/* Atajos de prueba para el profesor */}
-        <div className="px-6 py-2">
-          <div className="bg-[#F3F5FE] border border-[#D8DFFA] rounded-xl p-3">
-            {/* <div className="flex items-center gap-1.5 text-xs font-bold text-[#0000FE] mb-2">
-              <span>Cuentas de prueba en MySQL (Docker):</span>
-            </div> */}
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => fillQuickCredentials('cliente')}
-                className="flex-1 bg-white hover:bg-slate-50 text-[11px] font-semibold py-1.5 px-2 rounded-lg border border-slate-200 text-slate-700 transition-colors shadow-2xs text-center cursor-pointer"
-              >
-                👤 Cargar Cliente
-              </button>
-              <button
-                type="button"
-                onClick={() => fillQuickCredentials('artista')}
-                className="flex-1 bg-white hover:bg-slate-50 text-[11px] font-semibold py-1.5 px-2 rounded-lg border border-slate-200 text-slate-700 transition-colors shadow-2xs text-center cursor-pointer"
-              >
-                🎨 Cargar Artista
-              </button>
-            </div>
-          </div>
-        </div>
 
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4 pt-4">
@@ -96,8 +58,8 @@ export const LoginPage: React.FC = () => {
               </div>
             )}
 
-            {successToken && (
-              <div className="p-3 text-xs bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl space-y-1">
+            {success && (
+              <div className="p-3 text-xs bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl">
                 <div className="flex items-center gap-1.5 font-bold">
                   <CheckCircle2 className="w-4 h-4" />
                   <span>¡Inicio de sesión exitoso! Redirigiendo...</span>
@@ -115,7 +77,7 @@ export const LoginPage: React.FC = () => {
                 required
                 value={correo}
                 onChange={(e) => setCorreo(e.target.value)}
-                placeholder="ejemplo@test.cl"
+                placeholder="ejemplo@correo.cl"
               />
             </div>
 
@@ -132,14 +94,6 @@ export const LoginPage: React.FC = () => {
                 placeholder="••••••••••••"
               />
             </div>
-
-            <div className="flex items-center justify-between text-xs text-slate-500 pt-1">
-              <span className="flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                Encriptado con BCrypt
-              </span>
-              <span className="text-slate-400">Pass: Password123!</span>
-            </div>
           </CardContent>
 
           <CardFooter className="flex flex-col gap-3">
@@ -148,22 +102,22 @@ export const LoginPage: React.FC = () => {
               variant="default"
               size="lg"
               className="w-full gap-2 text-base font-semibold"
-              disabled={isLoading || !!successToken}
+              disabled={isLoading || success}
             >
               {isLoading ? (
                 <span>Iniciando sesión...</span>
               ) : (
                 <>
-                  <span>Ingresar a CatálogoChileno</span>
+                  <span>Ingresar</span>
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}
             </Button>
 
             <p className="text-center text-xs text-slate-500">
-              ¿Quieres explorar sin ingresar?{' '}
-              <Link to="/" className="text-[#0000FE] font-semibold hover:underline">
-                Ir al Catálogo Público
+              ¿No tienes cuenta?{' '}
+              <Link to="/registro" className="text-[#0000FE] font-semibold hover:underline">
+                Crear cuenta
               </Link>
             </p>
           </CardFooter>

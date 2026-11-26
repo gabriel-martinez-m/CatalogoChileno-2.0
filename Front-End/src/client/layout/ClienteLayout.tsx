@@ -40,6 +40,16 @@ export const ClienteLayout: React.FC = () => {
               <Compass className="w-4 h-4 text-[#0000FE]" />
               Explorar Catálogo
             </Link>
+            {session?.rol === 'ROLE_CLIENTE' && (
+              <Link to="/ser-artista" className="hover:text-[#0000FE] transition-colors font-semibold text-slate-700">
+                Conviértete en artista
+              </Link>
+            )}
+            {session?.rol === 'ROLE_ADMINISTRADOR' && (
+              <Link to="/admin" className="hover:text-[#0000FE] transition-colors font-semibold text-slate-900">
+                Panel de Administración
+              </Link>
+            )}
           </nav>
 
           {/* Acciones de Usuario y Carrito */}
@@ -85,12 +95,19 @@ export const ClienteLayout: React.FC = () => {
                 </Button>
               </div>
             ) : (
-              <Link to="/login">
-                <Button variant="default" className="gap-2">
-                  <User className="w-4 h-4" />
-                  <span>Iniciar Sesión</span>
-                </Button>
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link to="/registro">
+                  <Button variant="outline" className="border-slate-200 text-slate-700 hover:border-[#0000FE] hover:text-[#0000FE]">
+                    <span>Crear cuenta</span>
+                  </Button>
+                </Link>
+                <Link to="/login">
+                  <Button variant="default" className="gap-2">
+                    <User className="w-4 h-4" />
+                    <span>Iniciar Sesión</span>
+                  </Button>
+                </Link>
+              </div>
             )}
           </div>
         </div>

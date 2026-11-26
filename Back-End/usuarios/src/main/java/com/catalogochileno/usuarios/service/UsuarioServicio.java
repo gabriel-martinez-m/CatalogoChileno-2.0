@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * Servicio principal del microservicio de usuarios.
  * Encapsula las reglas de negocio, la interacción con los repositorios
@@ -42,6 +44,14 @@ public class UsuarioServicio {
         perfil.setTelefono(telefono);
         
         return usuarioRepo.save(perfil);
+    }
+
+    /**
+     * Lista todos los perfiles de usuario registrados (uso administrativo).
+     */
+    @Transactional(readOnly = true)
+    public List<UsuarioPerfil> listarTodos() {
+        return usuarioRepo.findAll();
     }
 
     /**
@@ -108,9 +118,7 @@ public class UsuarioServicio {
     @Transactional
     public void verificarIdentidadArtista(Long idUsuario, Boolean verificado) {
         UsuarioPerfil usuario = obtenerPorId(idUsuario);
-        if (Boolean.TRUE.equals(verificado)) {
-            usuario.verificarIdentidad();
-            usuarioRepo.save(usuario);
-        }
+        usuario.setEstaVerificado(Boolean.TRUE.equals(verificado));
+        usuarioRepo.save(usuario);
     }
 }

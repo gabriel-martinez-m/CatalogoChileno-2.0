@@ -1,6 +1,8 @@
 package com.catalogochileno.usuarios.model.entity;
 
 import com.catalogochileno.usuarios.model.enums.TipoCuenta;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +17,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class DatosBancariosArtista {
 
     // Identificador único de los datos bancarios
@@ -23,6 +26,7 @@ public class DatosBancariosArtista {
     private Long idDatosBancarios;
 
     // Vinculación 1 a 1 con la entidad principal UsuarioPerfil
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", nullable = false, unique = true)
     private UsuarioPerfil usuarioPerfil;

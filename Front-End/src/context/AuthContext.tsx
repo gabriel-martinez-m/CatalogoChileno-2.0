@@ -1,10 +1,11 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
-import type { UserSession } from '@/interfaces/auth.interface'
+import React, { createContext, useContext, useState } from 'react'
+import type { RegisterData, UserSession } from '@/interfaces/auth.interface'
 import { authService } from '@/services/auth.service'
 
 interface AuthContextType {
   session: UserSession | null
   login: (correo: string, contrasena: string) => Promise<UserSession>
+  register: (data: RegisterData) => Promise<void>
   logout: () => void
   isAuthenticated: boolean
 }
@@ -12,28 +13,25 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [session, setSession] = useState<UserSession | null>(null)
+  const [session, setSession] = useState<UserSession | null>(() => authService.getCurrentSession())
 
-  useEffect(() => {
-    const current = authService.getCurrentSession()
-    if (current) {
-      setSession(current)
-    }
-  }, [])
-
-  const login = async (correo: string, contrasena: string) => {
+  const login = async (correo: string, contrasena: string): Promise<UserSession> => {
     const newSession = await authService.login(correo, contrasena)
     setSession(newSession)
     return newSession
   }
 
-  const logout = () => {
+  const register = async (data: RegisterData): Promise<void> => {
+    await authService.registrar(data)
+  }
+
+  const logout = (): void => {
     authService.logout()
     setSession(null)
   }
 
   return (
-    <AuthContext.Provider value={{ session, login, logout, isAuthenticated: !!session }}>
+    <AuthContext.Provider value={{ session, login, register, logout, isAuthenticated: !!session }}>
       {children}
     </AuthContext.Provider>
   )

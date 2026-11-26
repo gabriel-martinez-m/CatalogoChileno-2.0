@@ -1,5 +1,7 @@
 package com.catalogochileno.usuarios.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +16,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class PerfilArtista {
 
     // Identificador único del perfil del artista
@@ -22,6 +25,7 @@ public class PerfilArtista {
     private Long idPerfilArtista;
 
     // Vinculación 1 a 1 con la entidad principal UsuarioPerfil
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", nullable = false, unique = true)
     private UsuarioPerfil usuarioPerfil;

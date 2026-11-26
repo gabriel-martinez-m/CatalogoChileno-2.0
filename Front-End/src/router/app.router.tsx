@@ -2,7 +2,14 @@ import { createBrowserRouter } from 'react-router-dom'
 import { ClienteLayout } from '@/client/layout/ClienteLayout'
 import { CatalogPage } from '@/client/pages/CatalogPage'
 import { LoginPage } from '@/client/pages/LoginPage'
+import { RegisterPage } from '@/client/pages/RegisterPage'
+import { BecomeArtistPage } from '@/client/pages/BecomeArtistPage'
 import { CartPage } from '@/client/pages/CartPage'
+import { AdminLayout } from '@/admin/layout/AdminLayout'
+import { DashboardPage } from '@/admin/pages/DashboardPage'
+import { ModerationPage } from '@/admin/pages/ModerationPage'
+import { ArtistVerificationPage } from '@/admin/pages/ArtistVerificationPage'
+import { RequireRole } from '@/router/RequireRole'
 
 export const appRouter = createBrowserRouter([
   {
@@ -18,8 +25,30 @@ export const appRouter = createBrowserRouter([
         element: <LoginPage />,
       },
       {
+        path: 'registro',
+        element: <RegisterPage />,
+      },
+      {
+        path: 'ser-artista',
+        element: <BecomeArtistPage />,
+      },
+      {
         path: 'carrito',
         element: <CartPage />,
+      },
+    ],
+  },
+  {
+    path: '/admin',
+    element: <RequireRole rol="ROLE_ADMINISTRADOR" />,
+    children: [
+      {
+        element: <AdminLayout />,
+        children: [
+          { index: true, element: <DashboardPage /> },
+          { path: 'moderacion', element: <ModerationPage /> },
+          { path: 'verificacion', element: <ArtistVerificationPage /> },
+        ],
       },
     ],
   },

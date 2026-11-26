@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * Controlador REST para la gestión de usuarios, perfiles de artista y datos bancarios.
  * No contiene lógica de negocio; delega las operaciones a UsuarioServicio.
@@ -35,6 +37,14 @@ public class UsuarioControlador {
         
         UsuarioPerfil perfil = usuarioServicio.crearPerfilInicial(idCredencialRef, nombreCompleto, rutChileno, telefono, rol);
         return ResponseEntity.status(HttpStatus.CREATED).body(perfil);
+    }
+
+    /**
+     * Endpoint para listar todos los perfiles de usuario (uso administrativo).
+     */
+    @GetMapping
+    public ResponseEntity<List<UsuarioPerfil>> listarTodos() {
+        return ResponseEntity.ok(usuarioServicio.listarTodos());
     }
 
     /**

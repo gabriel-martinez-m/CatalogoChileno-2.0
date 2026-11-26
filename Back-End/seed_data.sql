@@ -11,7 +11,8 @@ USE `bd_autenticacion`;
 INSERT INTO `credencial` (`id_credencial`, `correo_electronico`, `contrasena_encriptada`, `rol`, `esta_activo`, `fecha_creacion`)
 VALUES 
 (1, 'cliente@test.cl', '$2a$10$I76yGuwL1PY0hfc7cDhQI.pzG09VGkNKYDKSel3eBAFqjfW3VqoKS', 'ROLE_CLIENTE', 1, NOW()),
-(2, 'artista@test.cl', '$2a$10$I76yGuwL1PY0hfc7cDhQI.pzG09VGkNKYDKSel3eBAFqjfW3VqoKS', 'ROLE_ARTISTA', 1, NOW())
+(2, 'artista@test.cl', '$2a$10$I76yGuwL1PY0hfc7cDhQI.pzG09VGkNKYDKSel3eBAFqjfW3VqoKS', 'ROLE_ARTISTA', 1, NOW()),
+(3, 'admin@test.cl', '$2a$10$I76yGuwL1PY0hfc7cDhQI.pzG09VGkNKYDKSel3eBAFqjfW3VqoKS', 'ROLE_ADMINISTRADOR', 1, NOW())
 ON DUPLICATE KEY UPDATE `contrasena_encriptada` = VALUES(`contrasena_encriptada`), `esta_activo` = 1;
 
 -- 2. SERVICIO DE USUARIOS (bd_usuarios)
@@ -20,7 +21,8 @@ USE `bd_usuarios`;
 INSERT INTO `usuario_perfil` (`id_usuario`, `id_credencial_ref`, `nombre_completo`, `rut_chileno`, `telefono`, `esta_verificado`, `fecha_registro`)
 VALUES
 (1, 1, 'Gabriel Martínez (Cliente)', '19.876.543-2', '+56991234567', 1, NOW()),
-(2, 2, 'Matías Valenzuela (Artista)', '18.765.432-1', '+56998765432', 1, NOW())
+(2, 2, 'Matías Valenzuela (Artista)', '18.765.432-1', '+56998765432', 1, NOW()),
+(3, 3, 'Administrador CatálogoChileno', '11.111.111-1', '+56900000000', 1, NOW())
 ON DUPLICATE KEY UPDATE `nombre_completo` = VALUES(`nombre_completo`), `esta_verificado` = 1;
 
 -- Perfil de Artista y Datos Bancarios para el usuario 2
@@ -103,6 +105,20 @@ INSERT INTO `producto` (
     22990.00, 'FOTO', 'VENTA_NORMAL', 'APROBADO', 'JPG RAW',
     6000, 4000, 0, 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80',
     1, 5, 5, NOW()
+),
+(
+    6, 2, 'Amanecer en el Desierto de Atacama',
+    'Fotografía de larga exposición del cielo estrellado sobre el Valle de la Luna, San Pedro de Atacama.',
+    27990.00, 'FOTO', 'VENTA_NORMAL', 'PENDIENTE_REVISION', 'JPG RAW',
+    6000, 4000, 0, 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80',
+    1, 1, 1, NOW()
+),
+(
+    7, 2, 'Costanera de Valparaíso en 4K',
+    'Video en 4K de la costanera y los cerros de Valparaíso durante el atardecer.',
+    34990.00, 'VIDEO', 'VENTA_NORMAL', 'PENDIENTE_REVISION', 'MP4 Pro-Res',
+    3840, 2160, 30, 'https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=1200&q=80',
+    2, 2, 2, NOW()
 )
 ON DUPLICATE KEY UPDATE 
     `titulo` = VALUES(`titulo`), 

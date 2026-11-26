@@ -1,5 +1,5 @@
 import { GATEWAY_URL, handleApiResponse } from './api.config'
-import type { Producto } from '@/interfaces/product.interface'
+import type { EstadoProducto, Producto } from '@/interfaces/product.interface'
 
 export const productService = {
   /**
@@ -7,6 +7,15 @@ export const productService = {
    */
   async getProductos(): Promise<Producto[]> {
     const response = await fetch(`${GATEWAY_URL}/productos?estado=APROBADO`)
+    return handleApiResponse<Producto[]>(response)
+  },
+
+  /**
+   * Obtiene obras filtradas por estado (uso administrativo). Sin estado devuelve todas.
+   */
+  async getProductosPorEstado(estado?: EstadoProducto): Promise<Producto[]> {
+    const query = estado ? `?estado=${estado}` : ''
+    const response = await fetch(`${GATEWAY_URL}/productos${query}`)
     return handleApiResponse<Producto[]>(response)
   },
 
