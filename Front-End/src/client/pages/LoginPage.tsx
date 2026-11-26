@@ -24,7 +24,12 @@ export const LoginPage: React.FC = () => {
     try {
       const session = await login(correo, contrasena)
       setSuccess(true)
-      const destino = session.rol === 'ROLE_ADMINISTRADOR' ? '/admin' : '/'
+      const destino =
+        session.rol === 'ROLE_ADMINISTRADOR'
+          ? '/admin'
+          : session.rol === 'ROLE_ARTISTA'
+            ? '/artista'
+            : '/'
       setTimeout(() => navigate(destino), 800)
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Error al autenticar'

@@ -1,6 +1,9 @@
 package com.catalogochileno.catalogo.controller;
 
+import com.catalogochileno.catalogo.model.entity.Categoria;
+import com.catalogochileno.catalogo.model.entity.Comuna;
 import com.catalogochileno.catalogo.model.entity.Producto;
+import com.catalogochileno.catalogo.model.entity.Region;
 import com.catalogochileno.catalogo.model.enums.EstadoProductoEnum;
 import com.catalogochileno.catalogo.model.enums.TipoMedioEnum;
 import com.catalogochileno.catalogo.model.enums.TipoVentaEnum;
@@ -35,10 +38,26 @@ public class ProductoControlador {
             @RequestParam Long idCategoria,
             @RequestParam(required = false) Long idRegion,
             @RequestParam(required = false) Long idComuna,
-            @RequestParam(required = false) Set<Long> idsEtiquetas) {
+            @RequestParam(required = false) Set<Long> idsEtiquetas,
+            @RequestParam(required = false) String urlPrevisualizacion) {
 
-        Producto producto = productoServicio.crearProducto(idArtista, titulo, descripcion, precio, tipoMedio, tipoVenta, idCategoria, idRegion, idComuna, idsEtiquetas);
+        Producto producto = productoServicio.crearProducto(idArtista, titulo, descripcion, precio, tipoMedio, tipoVenta, idCategoria, idRegion, idComuna, idsEtiquetas, urlPrevisualizacion);
         return ResponseEntity.status(HttpStatus.CREATED).body(producto);
+    }
+
+    @GetMapping("/categorias")
+    public ResponseEntity<List<Categoria>> listarCategorias() {
+        return ResponseEntity.ok(productoServicio.listarCategorias());
+    }
+
+    @GetMapping("/regiones")
+    public ResponseEntity<List<Region>> listarRegiones() {
+        return ResponseEntity.ok(productoServicio.listarRegiones());
+    }
+
+    @GetMapping("/comunas")
+    public ResponseEntity<List<Comuna>> listarComunas() {
+        return ResponseEntity.ok(productoServicio.listarComunas());
     }
 
     @GetMapping("/{id}")

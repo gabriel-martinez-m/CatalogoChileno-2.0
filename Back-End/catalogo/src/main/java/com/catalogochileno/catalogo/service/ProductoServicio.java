@@ -34,7 +34,7 @@ public class ProductoServicio {
     @Transactional
     public Producto crearProducto(Long idArtista, String titulo, String descripcion, BigDecimal precio,
                                   TipoMedioEnum tipoMedio, TipoVentaEnum tipoVenta, Long idCategoria,
-                                  Long idRegion, Long idComuna, Set<Long> idsEtiquetas) {
+                                  Long idRegion, Long idComuna, Set<Long> idsEtiquetas, String urlPrevisualizacion) {
 
         Categoria categoria = categoriaRepo.findById(idCategoria)
                 .orElseThrow(() -> new RuntimeException("Categoría no encontrada con ID: " + idCategoria));
@@ -48,6 +48,9 @@ public class ProductoServicio {
         producto.setTipoVenta(tipoVenta);
         producto.setCategoria(categoria);
         producto.setEstado(EstadoProductoEnum.PENDIENTE_REVISION);
+        if (urlPrevisualizacion != null && !urlPrevisualizacion.isBlank()) {
+            producto.setUrlPrevisualizacion(urlPrevisualizacion.trim());
+        }
 
         if (idRegion != null) {
             Region region = regionRepo.findById(idRegion).orElse(null);
@@ -114,6 +117,24 @@ public class ProductoServicio {
         Producto producto = obtenerPorId(id);
         producto.rechazar(motivo);
         return productoRepo.save(producto);
+    }
+
+    /**
+     * Lista categorías, regiones y comunas disponibles para catalogación.
+     */
+    @Transactional(readOnly = true)
+    public List<Categoria> listarCategorias() {
+        return categoriaRepo.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Region> listarRegiones() {
+        return regionRepo.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Comuna> listarComunas() {
+        return comunaRepo.findAll();
     }
 
     /**

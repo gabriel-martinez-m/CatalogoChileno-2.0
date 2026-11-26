@@ -4,17 +4,19 @@ import { useAuth } from '@/context/AuthContext'
 import type { RolUsuario } from '@/interfaces/auth.interface'
 
 interface RequireRoleProps {
-  rol: RolUsuario
+  rol: RolUsuario | RolUsuario[]
 }
 
 /**
- * Protege un grupo de rutas: sin sesión redirige a /login y con otro rol a /.
+ * Protege un grupo de rutas: sin sesión redirige a /login y sin el rol permitido a /.
  */
 export const RequireRole: React.FC<RequireRoleProps> = ({ rol }) => {
   const { session } = useAuth()
 
   if (!session) return <Navigate to="/login" replace />
-  if (session.rol !== rol) return <Navigate to="/" replace />
+
+  const rolesPermitidos = Array.isArray(rol) ? rol : [rol]
+  if (!rolesPermitidos.includes(session.rol)) return <Navigate to="/" replace />
 
   return <Outlet />
 }

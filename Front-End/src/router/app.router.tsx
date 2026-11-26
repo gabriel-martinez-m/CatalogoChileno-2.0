@@ -9,6 +9,10 @@ import { AdminLayout } from '@/admin/layout/AdminLayout'
 import { DashboardPage } from '@/admin/pages/DashboardPage'
 import { ModerationPage } from '@/admin/pages/ModerationPage'
 import { ArtistVerificationPage } from '@/admin/pages/ArtistVerificationPage'
+import { ArtistLayout } from '@/artist/layout/ArtistLayout'
+import { ArtistDashboardPage } from '@/artist/pages/ArtistDashboardPage'
+import { ArtistWorksPage } from '@/artist/pages/ArtistWorksPage'
+import { ArtistUploadPage } from '@/artist/pages/ArtistUploadPage'
 import { RequireRole } from '@/router/RequireRole'
 
 export const appRouter = createBrowserRouter([
@@ -48,6 +52,20 @@ export const appRouter = createBrowserRouter([
           { index: true, element: <DashboardPage /> },
           { path: 'moderacion', element: <ModerationPage /> },
           { path: 'verificacion', element: <ArtistVerificationPage /> },
+        ],
+      },
+    ],
+  },
+  {
+    path: '/artista',
+    element: <RequireRole rol={['ROLE_ARTISTA', 'ROLE_ADMINISTRADOR']} />,
+    children: [
+      {
+        element: <ArtistLayout />,
+        children: [
+          { index: true, element: <ArtistDashboardPage /> },
+          { path: 'obras', element: <ArtistWorksPage /> },
+          { path: 'publicar', element: <ArtistUploadPage /> },
         ],
       },
     ],

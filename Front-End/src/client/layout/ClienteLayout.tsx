@@ -45,6 +45,11 @@ export const ClienteLayout: React.FC = () => {
                 Conviértete en artista
               </Link>
             )}
+            {session?.rol === 'ROLE_ARTISTA' && (
+              <Link to="/artista" className="hover:text-[#0000FE] transition-colors font-semibold text-slate-900">
+                Panel de Artista
+              </Link>
+            )}
             {session?.rol === 'ROLE_ADMINISTRADOR' && (
               <Link to="/admin" className="hover:text-[#0000FE] transition-colors font-semibold text-slate-900">
                 Panel de Administración

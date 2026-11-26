@@ -39,3 +39,15 @@ export interface Producto {
   comuna?: Comuna
   fechaCreacion?: string
 }
+
+export interface CrearProductoData {
+  titulo: string
+  descripcion: string
+  precio: number
+  tipoMedio: TipoMedio
+  tipoVenta: TipoVenta
+  idCategoria: number
+  idRegion: number
+  idComuna: number
+  urlPrevisualizacion: string
+}
