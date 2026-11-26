@@ -15,7 +15,7 @@ export const CatalogPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null)
   const [addedIds, setAddedIds] = useState<Record<number, boolean>>({})
 
-  const { addToCart, itemCount } = useCart()
+  const { cart, addToCart, itemCount } = useCart()
   const { session } = useAuth()
 
   useEffect(() => {
@@ -174,7 +174,8 @@ export const CatalogPage: React.FC = () => {
       {!loading && !error && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {productos.map((producto, index) => {
-            const isAdded = !!addedIds[producto.id]
+            const enCarrito = !!cart?.items?.some((i) => i.idProductoRef === producto.id)
+            const isAdded = !!addedIds[producto.id] || enCarrito
 
             return (
               <Card key={producto.id} className="overflow-hidden flex flex-col group border-slate-200/80 hover:border-slate-300 hover:shadow-md transition-all">
@@ -230,27 +231,40 @@ export const CatalogPage: React.FC = () => {
                       </span>
                     </div>
 
-                    {/* Botón Acción Agregar */}
-                    <Button
-                      onClick={() => handleAddToCart(producto)}
-                      variant={isAdded ? 'secondary' : 'default'}
-                      size="sm"
-                      className={`gap-1.5 transition-all ${
-                        isAdded ? 'bg-emerald-600 text-white hover:bg-emerald-700' : ''
-                      }`}
-                    >
-                      {isAdded ? (
-                        <>
+                    {/* Botón Acción Agregar (1 licencia por producto) */}
+                    {enCarrito ? (
+                      <Link to="/carrito">
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          className="gap-1.5 bg-emerald-600 text-white hover:bg-emerald-700"
+                        >
                           <Check className="w-3.5 h-3.5" />
-                          <span>¡Agregado!</span>
-                        </>
-                      ) : (
-                        <>
-                          <ShoppingCart className="w-3.5 h-3.5" />
-                          <span>Agregar</span>
-                        </>
-                      )}
-                    </Button>
+                          <span>En carrito</span>
+                        </Button>
+                      </Link>
+                    ) : (
+                      <Button
+                        onClick={() => handleAddToCart(producto)}
+                        variant={isAdded ? 'secondary' : 'default'}
+                        size="sm"
+                        className={`gap-1.5 transition-all ${
+                          isAdded ? 'bg-emerald-600 text-white hover:bg-emerald-700' : ''
+                        }`}
+                      >
+                        {isAdded ? (
+                          <>
+                            <Check className="w-3.5 h-3.5" />
+                            <span>¡Agregado!</span>
+                          </>
+                        ) : (
+                          <>
+                            <ShoppingCart className="w-3.5 h-3.5" />
+                            <span>Agregar</span>
+                          </>
+                        )}
+                      </Button>
+                    )}
                   </div>
                 </CardContent>
               </Card>

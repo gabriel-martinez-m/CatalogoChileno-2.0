@@ -142,7 +142,7 @@ export const OrderSuccessPage: React.FC = () => {
                   </div>
                   <h3 className="font-bold text-sm text-slate-900 truncate">{item.titulo}</h3>
                   <p className="text-xs text-slate-500">
-                    Cantidad: {item.cantidad} • {formatCLP(item.precioUnitarioClp * item.cantidad)}
+                    1 Licencia Comercial • {formatCLP(item.precioUnitarioClp)}
                   </p>
                 </div>
               </div>

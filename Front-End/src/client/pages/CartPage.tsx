@@ -6,8 +6,6 @@ import {
   ArrowLeft,
   ArrowRight,
   ShieldCheck,
-  Plus,
-  Minus,
   MapPin,
   Download,
   FileCheck2,
@@ -28,7 +26,7 @@ const formatCLP = (monto: number): string =>
   }).format(monto)
 
 export const CartPage: React.FC = () => {
-  const { cart, itemCount, totalAmount, isLoading, updateQuantity, removeFromCart, clearCart } = useCart()
+  const { cart, itemCount, totalAmount, isLoading, removeFromCart, clearCart } = useCart()
   const { session } = useAuth()
   const navigate = useNavigate()
   const [productosMap, setProductosMap] = useState<Record<number, Producto>>({})
@@ -143,41 +141,17 @@ export const CartPage: React.FC = () => {
                         <h4 className="font-bold text-sm sm:text-base text-slate-900 truncate">
                           {titulo}
                         </h4>
-                        <p className="text-xs text-slate-500">
-                          Valor unitario: <span className="font-semibold text-slate-700">{formatCLP(item.precioUnitarioClp)}</span>
+                        <p className="text-xs text-emerald-700 font-semibold">
+                          1 Licencia Comercial Digital
                         </p>
                       </div>
                     </div>
 
-                    {/* Controles de Cantidad + Subtotal + Eliminar */}
+                    {/* Precio + Eliminar */}
                     <div className="flex items-center justify-between sm:justify-end gap-4 pt-3 sm:pt-0 border-t sm:border-t-0 border-slate-100">
-                      <div className="inline-flex items-center rounded-xl border border-slate-200 bg-slate-50/70 p-0.5">
-                        <button
-                          type="button"
-                          disabled={isLoading || item.cantidad <= 1}
-                          onClick={() => updateQuantity(item.idItemCarrito, item.cantidad - 1)}
-                          className="w-7 h-7 flex items-center justify-center rounded-lg text-slate-600 hover:bg-white disabled:opacity-40 cursor-pointer"
-                          title="Disminuir cantidad"
-                        >
-                          <Minus className="w-3.5 h-3.5" />
-                        </button>
-                        <span className="w-8 text-center text-xs font-bold text-slate-900">
-                          {item.cantidad}
-                        </span>
-                        <button
-                          type="button"
-                          disabled={isLoading}
-                          onClick={() => updateQuantity(item.idItemCarrito, item.cantidad + 1)}
-                          className="w-7 h-7 flex items-center justify-center rounded-lg text-slate-600 hover:bg-white disabled:opacity-40 cursor-pointer"
-                          title="Aumentar cantidad"
-                        >
-                          <Plus className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-
                       <div className="text-right min-w-[90px]">
                         <span className="font-extrabold text-base text-slate-950">
-                          {formatCLP(item.precioUnitarioClp * item.cantidad)}
+                          {formatCLP(item.precioUnitarioClp)}
                         </span>
                       </div>
 

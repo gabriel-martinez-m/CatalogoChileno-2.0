@@ -53,7 +53,7 @@ class CarritoServicioTest {
         // Arrange
         Long idUsuario = 1L;
         Long idProducto = 10L;
-        Integer cantidad = 2;
+        Integer cantidad = 1;
         Integer precio = 24990;
 
         when(catalogoFeign.validarProductoParaCompra(idProducto)).thenReturn(true);
@@ -69,9 +69,9 @@ class CarritoServicioTest {
         assertEquals(1, resultado.getItems().size());
         ItemCarrito itemAgregado = resultado.getItems().get(0);
         assertEquals(idProducto, itemAgregado.getIdProductoRef());
-        assertEquals(cantidad, itemAgregado.getCantidad());
+        assertEquals(1, itemAgregado.getCantidad());
         assertEquals(precio, itemAgregado.getPrecioUnitarioClp());
-        assertEquals(49980, itemAgregado.calcularSubtotal());
+        assertEquals(24990, itemAgregado.calcularSubtotal());
 
         verify(catalogoFeign, times(1)).validarProductoParaCompra(idProducto);
         verify(carritoRepo, times(1)).save(carritoExistente);
@@ -97,8 +97,8 @@ class CarritoServicioTest {
     }
 
     @Test
-    @DisplayName("Debe incrementar la cantidad del ítem existente si el producto ya estaba en el carrito")
-    void agregarItem_ProductoYaExisteEnCarrito_IncrementaCantidad() {
+    @DisplayName("Debe mantener 1 sola licencia si el producto ya estaba en el carrito")
+    void agregarItem_ProductoYaExisteEnCarrito_MantieneUnaLicencia() {
         // Arrange
         Long idUsuario = 1L;
         Long idProducto = 10L;
@@ -117,12 +117,12 @@ class CarritoServicioTest {
         when(carritoRepo.save(any(Carrito.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Act
-        Carrito resultado = carritoServicio.agregarItem(idUsuario, null, idProducto, 2, 24990);
+        Carrito resultado = carritoServicio.agregarItem(idUsuario, null, idProducto, 1, 24990);
 
         // Assert
         assertEquals(1, resultado.getItems().size(), "No debe duplicar la fila del ítem");
-        assertEquals(3, resultado.getItems().get(0).getCantidad());
-        assertEquals(74970, resultado.getItems().get(0).calcularSubtotal());
+        assertEquals(1, resultado.getItems().get(0).getCantidad(), "Debe mantener 1 sola licencia por producto");
+        assertEquals(24990, resultado.getItems().get(0).calcularSubtotal());
         verify(carritoRepo, times(1)).save(carritoExistente);
     }
 

@@ -377,7 +377,7 @@ export const CheckoutPage: React.FC = () => {
                           <p className="font-semibold text-slate-900 truncate">
                             {info?.titulo || `Obra #${item.idProductoRef}`}
                           </p>
-                          <p className="text-slate-500">Cant: {item.cantidad}</p>
+                          <p className="text-slate-500">1 Licencia Comercial</p>
                         </div>
                       </div>
                       <span className="font-bold text-slate-900 shrink-0">

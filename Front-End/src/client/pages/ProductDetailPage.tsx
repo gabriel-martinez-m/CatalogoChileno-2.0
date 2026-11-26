@@ -48,14 +48,13 @@ const esUrlVideo = (url?: string): boolean => {
 export const ProductDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const { addToCart, isLoading: cartLoading } = useCart()
+  const { cart, addToCart, isLoading: cartLoading } = useCart()
 
   const [producto, setProducto] = useState<Producto | null>(null)
   const [artista, setArtista] = useState<UsuarioPerfil | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
 
-  const [cantidad, setCantidad] = useState<number>(1)
   const [agregado, setAgregado] = useState<boolean>(false)
 
   // Visor ampliado (Lightbox + Zoom) para fotografías
@@ -99,16 +98,20 @@ export const ProductDetailPage: React.FC = () => {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [ampliada])
 
+  const enCarrito = !!cart?.items?.some((item) => item.idProductoRef === producto?.id)
+
   const handleAgregar = async (): Promise<void> => {
-    if (!producto) return
-    await addToCart(producto.id, producto.precio, cantidad)
+    if (!producto || enCarrito) return
+    await addToCart(producto.id, producto.precio, 1)
     setAgregado(true)
     setTimeout(() => setAgregado(false), 2000)
   }
 
   const handleComprarAhora = async (): Promise<void> => {
     if (!producto) return
-    await addToCart(producto.id, producto.precio, cantidad)
+    if (!enCarrito) {
+      await addToCart(producto.id, producto.precio, 1)
+    }
     navigate('/checkout')
   }
 
@@ -336,48 +339,46 @@ export const ProductDetailPage: React.FC = () => {
                   </span>
                 </div>
 
-                {/* Selector de cantidad */}
-                <div className="inline-flex items-center rounded-xl border border-slate-200 bg-slate-50 p-0.5">
-                  <button
-                    type="button"
-                    onClick={() => setCantidad((c) => Math.max(1, c - 1))}
-                    className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-600 hover:bg-white font-bold cursor-pointer"
-                  >
-                    -
-                  </button>
-                  <span className="w-8 text-center text-sm font-bold text-slate-900">{cantidad}</span>
-                  <button
-                    type="button"
-                    onClick={() => setCantidad((c) => c + 1)}
-                    className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-600 hover:bg-white font-bold cursor-pointer"
-                  >
-                    +
-                  </button>
-                </div>
+                <Badge variant="default" className="text-xs px-3 py-1">
+                  1 Licencia por usuario
+                </Badge>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                <Button
-                  size="lg"
-                  variant={agregado ? 'secondary' : 'outline'}
-                  className={`gap-2 font-bold ${
-                    agregado ? 'bg-emerald-600 text-white hover:bg-emerald-700 border-emerald-600' : ''
-                  }`}
-                  disabled={cartLoading}
-                  onClick={handleAgregar}
-                >
-                  {agregado ? (
-                    <>
+                {enCarrito ? (
+                  <Link to="/carrito" className="w-full">
+                    <Button
+                      size="lg"
+                      variant="secondary"
+                      className="w-full gap-2 font-bold bg-emerald-600 text-white hover:bg-emerald-700"
+                    >
                       <Check className="w-4 h-4" />
-                      <span>¡Agregado!</span>
-                    </>
-                  ) : (
-                    <>
-                      <ShoppingCart className="w-4 h-4" />
-                      <span>Agregar al Carrito</span>
-                    </>
-                  )}
-                </Button>
+                      <span>Ya en tu carrito</span>
+                    </Button>
+                  </Link>
+                ) : (
+                  <Button
+                    size="lg"
+                    variant={agregado ? 'secondary' : 'outline'}
+                    className={`gap-2 font-bold ${
+                      agregado ? 'bg-emerald-600 text-white hover:bg-emerald-700 border-emerald-600' : ''
+                    }`}
+                    disabled={cartLoading}
+                    onClick={handleAgregar}
+                  >
+                    {agregado ? (
+                      <>
+                        <Check className="w-4 h-4" />
+                        <span>¡Agregado!</span>
+                      </>
+                    ) : (
+                      <>
+                        <ShoppingCart className="w-4 h-4" />
+                        <span>Agregar al Carrito</span>
+                      </>
+                    )}
+                  </Button>
+                )}
 
                 <Button
                   size="lg"

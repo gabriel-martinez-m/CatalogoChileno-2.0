@@ -59,19 +59,18 @@ public class CarritoServicio {
 
         Carrito carrito = obtenerOCrearCarrito(idUsuarioRef, tokenInvitado);
 
-        // Verificar si el producto ya existe en el carrito
+        // Regla de Negocio: 1 licencia por producto por carrito (sin duplicar ni sumar unidades)
         Optional<ItemCarrito> itemExistente = carrito.getItems().stream()
                 .filter(item -> item.getIdProductoRef().equals(idProductoRef))
                 .findFirst();
 
         if (itemExistente.isPresent()) {
-            ItemCarrito item = itemExistente.get();
-            item.actualizarCantidad(item.getCantidad() + cantidad);
+            itemExistente.get().setCantidad(1);
         } else {
             ItemCarrito nuevoItem = new ItemCarrito();
             nuevoItem.setCarrito(carrito);
             nuevoItem.setIdProductoRef(idProductoRef);
-            nuevoItem.setCantidad(cantidad);
+            nuevoItem.setCantidad(1);
             nuevoItem.setPrecioUnitarioClp(precioUnitarioClp);
             carrito.getItems().add(nuevoItem);
         }
