@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { ClienteLayout } from '@/client/layout/ClienteLayout'
 import { CatalogPage } from '@/client/pages/CatalogPage'
+import { ProductDetailPage } from '@/client/pages/ProductDetailPage'
 import { LoginPage } from '@/client/pages/LoginPage'
 import { RegisterPage } from '@/client/pages/RegisterPage'
 import { BecomeArtistPage } from '@/client/pages/BecomeArtistPage'
@@ -25,6 +26,10 @@ export const appRouter = createBrowserRouter([
       {
         index: true,
         element: <CatalogPage />,
+      },
+      {
+        path: 'producto/:id',
+        element: <ProductDetailPage />,
       },
       {
         path: 'login',

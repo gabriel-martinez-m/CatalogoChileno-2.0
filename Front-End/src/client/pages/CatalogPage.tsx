@@ -177,9 +177,12 @@ export const CatalogPage: React.FC = () => {
             const isAdded = !!addedIds[producto.id]
 
             return (
-              <Card key={producto.id} className="overflow-hidden flex flex-col group border-slate-200/80">
-                {/* Imagen Preview con Badges */}
-                <div className="relative aspect-4/3 w-full overflow-hidden bg-slate-100">
+              <Card key={producto.id} className="overflow-hidden flex flex-col group border-slate-200/80 hover:border-slate-300 hover:shadow-md transition-all">
+                {/* Imagen Preview con Badges (Clic abre detalle) */}
+                <Link
+                  to={`/producto/${producto.id}`}
+                  className="relative aspect-4/3 w-full overflow-hidden bg-slate-100 block"
+                >
                   <img
                     src={producto.urlPrevisualizacion || '/images/01.jpg'}
                     alt={producto.titulo}
@@ -204,18 +207,18 @@ export const CatalogPage: React.FC = () => {
                       {getCiudadProducto(producto, index)}
                     </span>
                   </div>
-                </div>
+                </Link>
 
                 {/* Información de la Obra */}
                 <CardContent className="p-5 flex-1 flex flex-col justify-between space-y-4">
-                  <div className="space-y-1.5">
+                  <Link to={`/producto/${producto.id}`} className="space-y-1.5 block">
                     <h3 className="font-bold text-base text-slate-900 group-hover:text-[#0000FE] transition-colors line-clamp-1">
                       {producto.titulo}
                     </h3>
                     <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
                       {producto.descripcion || 'Obra auténtica chilena en alta definición con licencia comercial.'}
                     </p>
-                  </div>
+                  </Link>
 
                   <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
                     <div>
