@@ -1,6 +1,6 @@
 import React from 'react'
 import { Outlet, Link, useNavigate } from 'react-router-dom'
-import { ShoppingCart, User, LogOut, Compass } from 'lucide-react'
+import { ShoppingCart, User, LogOut } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { useCart } from '@/context/CartContext'
 import { Button } from '@/components/ui/button'
@@ -36,10 +36,6 @@ export const ClienteLayout: React.FC = () => {
 
           {/* Navegación Central */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-            <Link to="/" className="hover:text-[#0000FE] transition-colors flex items-center gap-1.5 text-slate-900 font-semibold">
-              <Compass className="w-4 h-4 text-[#0000FE]" />
-              Explorar Catálogo
-            </Link>
             {session?.rol === 'ROLE_CLIENTE' && (
               <Link to="/ser-artista" className="hover:text-[#0000FE] transition-colors font-semibold text-slate-700">
                 Conviértete en artista
