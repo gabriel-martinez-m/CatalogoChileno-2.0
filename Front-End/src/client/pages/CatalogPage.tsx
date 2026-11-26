@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { ShoppingCart, Check, AlertCircle, MapPin, Eye, Camera, Video, ShieldCheck } from 'lucide-react'
+import { ShoppingCart, Check, AlertCircle, MapPin, Camera, Video } from 'lucide-react'
 import type { Producto } from '@/interfaces/product.interface'
 import { productService } from '@/services/product.service'
 import { useCart } from '@/context/CartContext'
-import { useAuth } from '@/context/AuthContext'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
@@ -15,8 +14,7 @@ export const CatalogPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null)
   const [addedIds, setAddedIds] = useState<Record<number, boolean>>({})
 
-  const { cart, addToCart, itemCount } = useCart()
-  const { session } = useAuth()
+  const { cart, addToCart } = useCart()
 
   useEffect(() => {
     loadProductos()
@@ -104,22 +102,6 @@ export const CatalogPage: React.FC = () => {
           <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
             Marketplace para adquirir fotografías 8K, tomas en drone 4K y material exclusivo de artistas chilenos con licencias comerciales inmediatas.
           </p>
-
-          <div className="flex flex-wrap items-center gap-4 pt-2">
-            <Link to="/carrito">
-              <Button variant="default" size="lg" className="gap-2 bg-[#0000FE] hover:bg-[#0000B8] text-white">
-                <ShoppingCart className="w-4 h-4" />
-                <span>Revisar Carrito ({itemCount})</span>
-              </Button>
-            </Link>
-            
-            {session && (
-              <span className="text-xs text-emerald-400 font-medium flex items-center gap-1.5 bg-black/30 px-3 py-2 rounded-full border border-emerald-500/20">
-                <ShieldCheck className="w-4 h-4" />
-                Sesión activa como: {session.nombre}
-              </span>
-            )}
-          </div>
         </div>
 
         {/* Decorative background circle */}
