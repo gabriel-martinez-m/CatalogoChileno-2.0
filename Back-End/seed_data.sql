@@ -45,7 +45,10 @@ INSERT INTO `region` (`id`, `codigo`, `nombre`) VALUES
 (2, 'CL-VS', 'Región de Valparaíso'),
 (3, 'CL-LL', 'Región de Los Lagos'),
 (4, 'CL-MA', 'Región de Magallanes y Antártica Chilena'),
-(5, 'CL-BI', 'Región del Biobío')
+(5, 'CL-BI', 'Región del Biobío'),
+(6, 'CL-AN', 'Región de Antofagasta'),
+(7, 'CL-CO', 'Región de Coquimbo'),
+(8, 'CL-AR', 'Región de La Araucanía')
 ON DUPLICATE KEY UPDATE `nombre` = VALUES(`nombre`);
 
 -- Comunas de Chile
@@ -54,7 +57,10 @@ INSERT INTO `comuna` (`id`, `nombre`, `id_region`) VALUES
 (2, 'Valparaíso', 2),
 (3, 'Puerto Varas', 3),
 (4, 'Torres del Paine', 4),
-(5, 'Concepción', 5)
+(5, 'Concepción', 5),
+(6, 'San Pedro de Atacama', 6),
+(7, 'La Serena', 7),
+(8, 'Pucón', 8)
 ON DUPLICATE KEY UPDATE `nombre` = VALUES(`nombre`);
 
 -- Categorías temáticas
@@ -119,6 +125,27 @@ INSERT INTO `producto` (
     34990.00, 'VIDEO', 'VENTA_NORMAL', 'PENDIENTE_REVISION', 'MP4 Pro-Res',
     3840, 2160, 30, 'https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=1200&q=80',
     2, 2, 2, NOW()
+),
+(
+    8, 2, 'Atardecer en el Valle de la Luna',
+    'Captura panorámica en alta definición sobre las dunas y formaciones rocosas del desierto más árido del mundo.',
+    26990.00, 'FOTO', 'VENTA_NORMAL', 'APROBADO', 'JPG RAW',
+    6000, 4000, 0, 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=1200&q=80',
+    1, 6, 6, NOW()
+),
+(
+    9, 2, 'Cielos Estrellados del Valle del Elqui',
+    'Astrofotografía nocturna de la Vía Láctea capturada bajo los cielos despejados de la Región de Coquimbo.',
+    31990.00, 'FOTO', 'VENTA_NORMAL', 'APROBADO', 'JPG RAW',
+    7200, 4800, 0, 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?auto=format&fit=crop&w=1200&q=80',
+    1, 7, 7, NOW()
+),
+(
+    10, 2, 'Vuelo Dron 4K sobre el Volcán Villarrica',
+    'Toma aérea cinematográfica rodeando el cráter nevado del Volcán Villarrica y los bosques nativos de la Araucanía.',
+    42990.00, 'VIDEO', 'VENTA_NORMAL', 'APROBADO', 'MP4 Pro-Res',
+    3840, 2160, 50, 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80',
+    2, 8, 8, NOW()
 )
 ON DUPLICATE KEY UPDATE 
     `titulo` = VALUES(`titulo`), 
