@@ -4,6 +4,7 @@ import { Images, Clock, DollarSign, TrendingUp, UploadCloud, ShieldCheck, AlertC
 import { useAuth } from '@/context/AuthContext'
 import { artistService } from '@/services/artist.service'
 import { userService } from '@/services/user.service'
+import { salesService } from '@/services/sales.service'
 import type { Producto } from '@/interfaces/product.interface'
 import type { UsuarioPerfil } from '@/interfaces/user.interface'
 import { Button } from '@/components/ui/button'
@@ -42,19 +43,16 @@ export const ArtistDashboardPage: React.FC = () => {
   const aprobadas = obras.filter((o) => o.estado === 'APROBADO')
   const pendientes = obras.filter((o) => o.estado === 'PENDIENTE_REVISION')
 
-  // Simulación contable (HU-22 / HU-25) basada en obras aprobadas mientras no exista servicio de órdenes conectado
-  const ventasDemo = aprobadas.slice(0, 3).map((o, idx) => {
-    const bruto = o.precio
-    const fee = Math.round(bruto * 0.15)
-    return {
-      idOrden: `TRX-2026-0${idx + 1}`,
-      obra: o.titulo,
-      fecha: '19/11/2026',
-      bruto,
-      fee,
-      neto: bruto - fee,
-    }
-  })
+  const ventasArtista = session ? salesService.getVentasPorArtista(session.idUsuario) : []
+  const ventasDemo = ventasArtista.map((v) => ({
+    idOrden: v.numeroOrden,
+    obra: v.tituloObra,
+    fecha: v.fecha,
+    bruto: v.montoBrutoClp,
+    fee: v.feePlataformaClp,
+    neto: v.netoArtistaClp,
+  }))
+  const proximoPago = salesService.getProximoPagoDia5()
 
   const totalBruto = ventasDemo.reduce((acc, v) => acc + v.bruto, 0)
   const totalNeto = ventasDemo.reduce((acc, v) => acc + v.neto, 0)
@@ -172,7 +170,9 @@ export const ArtistDashboardPage: React.FC = () => {
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
           <div>
             <h3 className="font-bold text-slate-900">Detalle de Ventas y Liquidaciones</h3>
-            <p className="text-xs text-slate-500">Desglose contable con deducción del 15% de comisión de plataforma</p>
+            <p className="text-xs text-slate-500">
+              Pago mensual acumulativo los días 5 • Próximo pago automático: <strong>{proximoPago.fechaTexto}</strong>
+            </p>
           </div>
           <Badge variant="secondary">Vista previa (Demo)</Badge>
         </div>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink, Outlet, Link, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, ShieldCheck, UserCheck, Store, LogOut } from 'lucide-react'
+import { LayoutDashboard, ShieldCheck, UserCheck, DollarSign, Store, LogOut } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { cn } from '@/lib/utils'
 
@@ -8,6 +8,7 @@ const ENLACES = [
   { to: '/admin', etiqueta: 'Dashboard', icono: LayoutDashboard, fin: true },
   { to: '/admin/moderacion', etiqueta: 'Moderación de obras', icono: ShieldCheck, fin: false },
   { to: '/admin/verificacion', etiqueta: 'Verificación de artistas', icono: UserCheck, fin: false },
+  { to: '/admin/ventas', etiqueta: 'Compras y Ventas', icono: DollarSign, fin: false },
 ]
 
 export const AdminLayout: React.FC = () => {

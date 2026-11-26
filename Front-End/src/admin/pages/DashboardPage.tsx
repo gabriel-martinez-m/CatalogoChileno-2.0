@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Clock, CheckCircle2, XCircle, Palette, ArrowRight, AlertCircle } from 'lucide-react'
+import { Clock, CheckCircle2, Palette, ArrowRight, AlertCircle, DollarSign, CalendarClock } from 'lucide-react'
 import type { Producto } from '@/interfaces/product.interface'
 import type { UsuarioPerfil } from '@/interfaces/user.interface'
 import { productService } from '@/services/product.service'
 import { adminService } from '@/services/admin.service'
+import { salesService } from '@/services/sales.service'
 import { Card, CardContent } from '@/components/ui/card'
 
 interface Kpi {
   etiqueta: string
-  valor: number
+  valor: string | number
   icono: React.ElementType
   color: string
 }
+
+const formatCLP = (monto: number): string =>
+  new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(monto)
 
 export const DashboardPage: React.FC = () => {
   const [productos, setProductos] = useState<Producto[]>([])
@@ -43,12 +47,15 @@ export const DashboardPage: React.FC = () => {
 
   const obrasPendientes = contar('PENDIENTE_REVISION')
   const artistasPendientes = usuarios.filter((u) => !!u.perfilArtista && !u.estaVerificado).length
+  const ventas = salesService.getVentas()
+  const gananciaFee = ventas.reduce((acc, v) => acc + v.feePlataformaClp, 0)
+  const proximoPago = salesService.getProximoPagoDia5()
 
   const kpis: Kpi[] = [
     { etiqueta: 'Obras pendientes', valor: obrasPendientes, icono: Clock, color: 'bg-amber-50 text-amber-600' },
     { etiqueta: 'Obras publicadas', valor: contar('APROBADO'), icono: CheckCircle2, color: 'bg-emerald-50 text-emerald-600' },
-    { etiqueta: 'Obras rechazadas', valor: contar('RECHAZADO'), icono: XCircle, color: 'bg-red-50 text-red-600' },
     { etiqueta: 'Artistas por verificar', valor: artistasPendientes, icono: Palette, color: 'bg-[#F3F5FE] text-[#0000FE]' },
+    { etiqueta: 'Ganancia FEE (15%)', valor: formatCLP(gananciaFee), icono: DollarSign, color: 'bg-emerald-50 text-emerald-700' },
   ]
 
   return (
@@ -115,12 +122,20 @@ export const DashboardPage: React.FC = () => {
               <ArrowRight className="w-4 h-4 text-[#0000FE]" />
             </Link>
           )}
+          <Link
+            to="/admin/ventas"
+            className="flex items-center justify-between p-4 rounded-xl bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <CalendarClock className="w-5 h-5 text-emerald-700" />
+              <span className="text-sm font-medium text-emerald-950">
+                Próximo pago automático a artistas: <strong>{proximoPago.fechaTexto}</strong> ({ventas.length} ventas registradas)
+              </span>
+            </div>
+            <ArrowRight className="w-4 h-4 text-emerald-700" />
+          </Link>
         </CardContent>
       </Card>
-
-      <p className="text-xs text-slate-400">
-        Ventas y comisiones se mostrarán cuando exista el módulo de órdenes.
-      </p>
     </div>
   )
 }

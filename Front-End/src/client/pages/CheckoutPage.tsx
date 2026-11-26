@@ -16,6 +16,7 @@ import {
 import { useCart } from '@/context/CartContext'
 import { useAuth } from '@/context/AuthContext'
 import { productService } from '@/services/product.service'
+import { salesService } from '@/services/sales.service'
 import type { Producto } from '@/interfaces/product.interface'
 import type {
   ItemOrdenResumen,
@@ -149,6 +150,7 @@ export const CheckoutPage: React.FC = () => {
         items: resumenItems,
       }
 
+      salesService.registrarVentaOrden(orden, productosMap)
       sessionStorage.setItem('ultima_orden', JSON.stringify(orden))
       navigate('/compra-exitosa', { state: { orden } })
     } catch (err: unknown) {

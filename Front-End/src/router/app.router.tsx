@@ -12,6 +12,7 @@ import { AdminLayout } from '@/admin/layout/AdminLayout'
 import { DashboardPage } from '@/admin/pages/DashboardPage'
 import { ModerationPage } from '@/admin/pages/ModerationPage'
 import { ArtistVerificationPage } from '@/admin/pages/ArtistVerificationPage'
+import { SalesFinancePage } from '@/admin/pages/SalesFinancePage'
 import { ArtistLayout } from '@/artist/layout/ArtistLayout'
 import { ArtistDashboardPage } from '@/artist/pages/ArtistDashboardPage'
 import { ArtistWorksPage } from '@/artist/pages/ArtistWorksPage'
@@ -67,6 +68,7 @@ export const appRouter = createBrowserRouter([
           { index: true, element: <DashboardPage /> },
           { path: 'moderacion', element: <ModerationPage /> },
           { path: 'verificacion', element: <ArtistVerificationPage /> },
+          { path: 'ventas', element: <SalesFinancePage /> },
         ],
       },
     ],
