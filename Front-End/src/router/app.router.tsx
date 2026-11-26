@@ -5,6 +5,8 @@ import { LoginPage } from '@/client/pages/LoginPage'
 import { RegisterPage } from '@/client/pages/RegisterPage'
 import { BecomeArtistPage } from '@/client/pages/BecomeArtistPage'
 import { CartPage } from '@/client/pages/CartPage'
+import { CheckoutPage } from '@/client/pages/CheckoutPage'
+import { OrderSuccessPage } from '@/client/pages/OrderSuccessPage'
 import { AdminLayout } from '@/admin/layout/AdminLayout'
 import { DashboardPage } from '@/admin/pages/DashboardPage'
 import { ModerationPage } from '@/admin/pages/ModerationPage'
@@ -39,6 +41,14 @@ export const appRouter = createBrowserRouter([
       {
         path: 'carrito',
         element: <CartPage />,
+      },
+      {
+        path: 'checkout',
+        element: <CheckoutPage />,
+      },
+      {
+        path: 'compra-exitosa',
+        element: <OrderSuccessPage />,
       },
     ],
   },

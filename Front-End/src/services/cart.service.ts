@@ -46,6 +46,17 @@ export const cartService = {
   },
 
   /**
+   * Actualiza la cantidad de un ítem existente en el carrito
+   */
+  async actualizarCantidad(idItem: number, nuevaCantidad: number): Promise<Carrito> {
+    const response = await fetch(
+      `${GATEWAY_URL}/carrito/items/${idItem}?nuevaCantidad=${nuevaCantidad}`,
+      { method: 'PUT' },
+    )
+    return handleApiResponse<Carrito>(response)
+  },
+
+  /**
    * Elimina un ítem del carrito
    */
   async eliminarItem(idCarrito: number, idProductoRef: number): Promise<Carrito> {
@@ -62,5 +73,15 @@ export const cartService = {
     await fetch(`${GATEWAY_URL}/carrito/${idCarrito}/vaciar`, {
       method: 'DELETE',
     })
+  },
+
+  /**
+   * Marca el carrito como PROCESADO al confirmar el pago en Checkout
+   */
+  async procesarCarrito(idCarrito: number): Promise<void> {
+    const response = await fetch(`${GATEWAY_URL}/carrito/${idCarrito}/procesar`, {
+      method: 'PUT',
+    })
+    await handleApiResponse<unknown>(response)
   },
 }

@@ -9,8 +9,10 @@ interface CartContextType {
   totalAmount: number
   isLoading: boolean
   addToCart: (idProducto: number, precio: number, cantidad?: number) => Promise<Carrito>
+  updateQuantity: (idItem: number, nuevaCantidad: number) => Promise<void>
   removeFromCart: (idProducto: number) => Promise<void>
   clearCart: () => Promise<void>
+  checkoutCart: () => Promise<void>
   refreshCart: () => Promise<void>
 }
 
@@ -48,6 +50,17 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }
 
+  const updateQuantity = async (idItem: number, nuevaCantidad: number) => {
+    if (nuevaCantidad < 1) return
+    setIsLoading(true)
+    try {
+      const updated = await cartService.actualizarCantidad(idItem, nuevaCantidad)
+      setCart(updated)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const removeFromCart = async (idProducto: number) => {
     if (!cart?.idCarrito) return
     setIsLoading(true)
@@ -70,6 +83,17 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }
 
+  const checkoutCart = async () => {
+    if (!cart?.idCarrito) return
+    setIsLoading(true)
+    try {
+      await cartService.procesarCarrito(cart.idCarrito)
+      await refreshCart()
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const itemCount = cart?.items?.reduce((acc, item) => acc + (item.cantidad || 0), 0) ?? 0
   const totalAmount = cart?.items?.reduce((acc, item) => acc + (item.precioUnitarioClp * item.cantidad), 0) ?? 0
 
@@ -81,8 +105,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         totalAmount,
         isLoading,
         addToCart,
+        updateQuantity,
         removeFromCart,
         clearCart,
+        checkoutCart,
         refreshCart,
       }}
     >
